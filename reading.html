@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Reading Drill">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Reading Drill">
+<meta name="mobile-web-app-capable" content="yes">
+<title>OOPT Reading Drill</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;700&display=swap');
+:root{
+  --ink:#1A1A2E;--page:#FAFAF7;--cream:#F4F1EA;
+  --teal:#2D7D6F;--teal-l:#E2F2EF;
+  --amber:#C07B2A;--amber-l:#FDF3E3;
+  --red:#B03A2E;--red-l:#FBEAE9;
+  --green:#2A7A4B;--green-l:#E4F4EB;
+  --gray:#6B7280;--border:#E2DDD5;
+  --p1:#4A6FA5;--p1-l:#EBF0F8;
+  --p2:#7B4FA5;--p2-l:#F2EBF8;
+  --p3:#2D7D6F;--p3-l:#E2F2EF;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--page);color:var(--ink);min-height:100vh;line-height:1.6;}
+
+/* ===HOME=== */
+#home{display:flex;flex-direction:column;align-items:center;padding:32px 18px 80px;min-height:100vh;}
+.home-badge{font-size:10px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;text-align:center;margin-bottom:12px;font-weight:700;}
+.home-title{font-family:'Lora',serif;font-size:28px;font-weight:600;color:var(--ink);text-align:center;line-height:1.3;margin-bottom:8px;}
+.home-sub{color:var(--gray);font-size:13px;text-align:center;line-height:1.7;margin-bottom:28px;max-width:360px;}
+.part-cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:420px;margin-bottom:24px;}
+.part-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;background:white;}
+.pc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.pc-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:1px;}
+.pc-title{font-weight:700;font-size:14px;}
+.pc-desc{font-size:12px;color:var(--gray);line-height:1.6;}
+.pc-count{font-size:11px;font-weight:700;color:var(--gray);margin-top:6px;}
+.start-btn{width:100%;max-width:420px;padding:16px;border-radius:14px;background:var(--ink);color:#fff;border:none;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.5px;}
+.filter-row{display:flex;gap:8px;width:100%;max-width:420px;margin-bottom:16px;flex-wrap:wrap;}
+.filt-btn{flex:1;min-width:80px;padding:9px 6px;border-radius:9px;border:2px solid var(--border);background:#fff;color:var(--gray);font-weight:700;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.filt-btn.on{border-color:var(--ink);background:var(--ink);color:#fff;}
+
+/* ===DRILL=== */
+#drill{display:none;flex-direction:column;align-items:center;padding:14px 16px 60px;min-height:100vh;}
+.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:520px;margin-bottom:10px;}
+.top-back{background:none;border:none;color:var(--gray);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:4px 0;}
+.top-ctr{font-size:12px;color:var(--gray);font-weight:600;}
+.top-home{background:none;border:none;color:var(--gray);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.prog-bar{height:4px;background:var(--border);border-radius:2px;width:100%;max-width:520px;margin-bottom:16px;}
+.prog-fill{height:100%;border-radius:2px;transition:width .4s ease;}
+.score-row{display:flex;justify-content:space-between;width:100%;max-width:520px;margin-bottom:12px;}
+.sc{font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;}
+.sc-ok{background:var(--green-l);color:var(--green);}
+.sc-ng{background:var(--red-l);color:var(--red);}
+.sc-streak{background:var(--amber-l);color:var(--amber);}
+
+/* PART LABEL */
+.part-label{width:100%;max-width:520px;margin-bottom:10px;}
+.pl-inner{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:8px;font-size:11px;font-weight:700;}
+
+/* QUESTION CARD */
+.q-card{background:white;border-radius:16px;padding:20px 18px;border:1.5px solid var(--border);width:100%;max-width:520px;margin-bottom:12px;box-shadow:0 2px 12px rgba(26,26,46,.06);}
+.q-meta{font-size:10px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.dialogue-box{background:var(--cream);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-family:'Lora',serif;font-size:14px;line-height:2;}
+.dialogue-line{display:flex;gap:8px;margin-bottom:4px;}
+.dialogue-line:last-child{margin-bottom:0;}
+.dl-speaker{font-weight:600;font-size:13px;min-width:28px;color:var(--gray);font-family:'DM Sans',sans-serif;}
+.dl-text{color:var(--ink);}
+.dl-text.highlight{background:#FFF3CD;border-radius:4px;padding:1px 4px;}
+.q-prompt{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:12px;line-height:1.5;}
+/* GAP FILL passage */
+.passage-box{background:var(--cream);border-radius:10px;padding:16px 18px;margin-bottom:14px;font-family:'Lora',serif;font-size:15px;line-height:2.3;}
+.gap-span{display:inline-block;min-width:70px;padding:1px 8px;margin:0 2px;border-radius:5px;text-align:center;font-weight:700;font-size:14px;border:2px dashed var(--border);background:#F8FAFF;color:var(--gray);font-family:'DM Sans',sans-serif;transition:all .2s;}
+.gap-span.filled{border:2px solid var(--teal);background:var(--teal-l);color:var(--teal);}
+.gap-span.ok{border:2px solid var(--green)!important;background:var(--green-l)!important;color:var(--green)!important;}
+.gap-span.ng{border:2px solid var(--red)!important;background:var(--red-l)!important;color:var(--red)!important;}
+.gap-label{font-size:11px;font-weight:700;color:var(--gray);margin-bottom:8px;}
+
+/* OPTIONS (Part 1 & 2) */
+.opts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:520px;margin-bottom:12px;}
+.opt{padding:13px 15px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--ink);font-weight:500;font-size:14px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;width:100%;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.opt-c{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;}
+.opt.sel{border-color:var(--teal);background:var(--teal-l);color:var(--teal);}
+.opt.sel .opt-c{border-color:var(--teal);color:var(--teal);}
+.opt.ok{border-color:var(--green)!important;background:var(--green-l)!important;color:var(--green)!important;}
+.opt.ok .opt-c{border-color:var(--green)!important;color:var(--green)!important;}
+.opt.ng{border-color:var(--red)!important;background:var(--red-l)!important;color:var(--red)!important;}
+.opt.ng .opt-c{border-color:var(--red)!important;color:var(--red)!important;}
+
+/* TEXT INPUT (Part 3) */
+.type-input{width:100%;padding:14px 16px;border-radius:10px;border:2px solid var(--border);font-size:16px;font-family:'DM Sans',sans-serif;color:var(--ink);background:#fff;outline:none;transition:border .2s;-webkit-appearance:none;}
+.type-input:focus{border-color:var(--teal);}
+.type-input.ok{border-color:var(--green)!important;background:var(--green-l)!important;}
+.type-input.ng{border-color:var(--red)!important;background:var(--red-l)!important;}
+.type-wrap{width:100%;max-width:520px;margin-bottom:12px;}
+.type-hint{font-size:11px;color:var(--gray);margin-top:6px;}
+
+/* EXPLANATION */
+.expl{padding:13px 15px;border-radius:12px;font-size:13px;line-height:1.8;width:100%;max-width:520px;margin-bottom:11px;display:none;}
+.expl.ok{background:var(--green-l);border:1.5px solid var(--green);}
+.expl.ng{background:var(--red-l);border:1.5px solid var(--red);}
+.expl-hd{font-weight:700;margin-bottom:4px;}
+.expl.ok .expl-hd{color:var(--green);}
+.expl.ng .expl-hd{color:var(--red);}
+.expl-jp{font-size:12px;color:#555;margin-top:4px;font-style:italic;line-height:1.6;}
+
+/* ACTION ROW */
+.act-row{display:flex;gap:8px;width:100%;max-width:520px;}
+.hint-btn{flex:1;padding:13px;border-radius:10px;background:#fff;border:1.5px solid var(--border);color:var(--gray);font-weight:600;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;}
+.check-btn{flex:2;padding:13px;border-radius:10px;background:var(--ink);color:#fff;border:none;font-weight:700;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.check-btn:disabled{background:var(--border);color:#aaa;cursor:default;}
+.next-btn{flex:1;padding:13px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-weight:700;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;}
+.hint-box{margin-top:10px;padding:9px 13px;border-radius:8px;background:#FFFBEA;border:1px solid #F0D060;font-size:12px;color:#7A5C00;display:none;}
+
+/* ===REVIEW=== */
+#review{display:none;flex-direction:column;align-items:center;padding:28px 16px 80px;min-height:100vh;}
+.rv-emoji{font-size:48px;text-align:center;margin-bottom:8px;}
+.rv-title{font-family:'Lora',serif;font-size:22px;text-align:center;margin-bottom:4px;}
+.rv-pct{font-size:42px;font-weight:800;text-align:center;margin-bottom:6px;}
+.rv-meta{font-size:12px;color:var(--gray);text-align:center;margin-bottom:24px;line-height:1.8;}
+.by-part{width:100%;max-width:520px;margin-bottom:20px;}
+.by-part-title{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:10px;}
+.bpt-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bpt-label{font-size:12px;font-weight:700;min-width:60px;}
+.bpt-bar{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.bpt-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.bpt-pct{font-size:12px;font-weight:700;min-width:36px;text-align:right;}
+.wrongs-title{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:10px;width:100%;max-width:520px;}
+.wc{background:white;border-radius:12px;padding:14px 16px;margin-bottom:9px;border:1.5px solid var(--border);width:100%;max-width:520px;}
+.wc-type{font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;margin-bottom:8px;display:inline-block;letter-spacing:1px;}
+.wc-q{font-size:13px;margin-bottom:5px;line-height:1.6;}
+.wc-ans{font-weight:700;font-size:12px;color:var(--green);}
+.wc-expl{font-size:11px;color:#555;font-style:italic;margin-top:3px;line-height:1.5;}
+.home-btn{width:100%;max-width:520px;padding:14px;border-radius:12px;background:var(--ink);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;}
+.retry-btn{width:100%;max-width:520px;padding:14px;border-radius:12px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;margin-bottom:6px;font-family:'DM Sans',sans-serif;}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <div class="home-badge">OOPT Use of English 対策</div>
+  <h1 class="home-title">Reading Drill</h1>
+  <p class="home-sub">本番OOPTと同じ3つの形式で練習<br>合計30問・詳しい解説付き</p>
+
+  <div class="part-cards">
+    <div class="part-card">
+      <div class="pc-top">
+        <span class="pc-badge" style="background:var(--p1-l);color:var(--p1)">PART 1</span>
+        <span class="pc-title">対話文 4択</span>
+      </div>
+      <div class="pc-desc">短い会話文を読み、空欄に最適な語句を4つの選択肢から選ぶ。<br>文法・語彙・明示的な意味が問われる。</div>
+      <div class="pc-count">10問</div>
+    </div>
+    <div class="part-card">
+      <div class="pc-top">
+        <span class="pc-badge" style="background:var(--p2-l);color:var(--p2)">PART 2</span>
+        <span class="pc-title">含意読取「What does X mean?」</span>
+      </div>
+      <div class="pc-desc">対話文を読み、特定の発言が何を意味しているかを3択で答える。<br>行間を読む力・慣用表現の理解が必要。</div>
+      <div class="pc-count">10問</div>
+    </div>
+    <div class="part-card">
+      <div class="pc-top">
+        <span class="pc-badge" style="background:var(--p3-l);color:var(--p3)">PART 3</span>
+        <span class="pc-title">Open Cloze（1語記入）</span>
+      </div>
+      <div class="pc-desc">長めの文章を読み、各空欄に1語だけ記入する。<br>文脈から適切な語を推測する力が問われる。</div>
+      <div class="pc-count">10問（5つのパッセージ×各2問）</div>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filt-btn on" onclick="setFilter('all',this)">全パート</button>
+    <button class="filt-btn" onclick="setFilter('1',this)">Part 1のみ</button>
+    <button class="filt-btn" onclick="setFilter('2',this)">Part 2のみ</button>
+    <button class="filt-btn" onclick="setFilter('3',this)">Part 3のみ</button>
+  </div>
+  <button class="start-btn" onclick="startDrill()">▶ ドリルを始める</button>
+</div>
+
+<!-- DRILL -->
+<div id="drill">
+  <div class="top-bar">
+    <button class="top-back" onclick="goHome()">⌂ ホーム</button>
+    <span class="top-ctr" id="q-ctr">1 / 30</span>
+    <span class="sc sc-streak" id="streak-d">🔥 0</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="score-row">
+    <span class="sc sc-ok" id="sc-ok">✓ 0</span>
+    <span class="sc sc-ng" id="sc-ng">✗ 0</span>
+  </div>
+
+  <div class="part-label"><div class="pl-inner" id="pl-inner"></div></div>
+  <div class="q-card" id="q-card">
+    <div class="q-meta" id="q-meta"></div>
+    <div id="q-body"></div>
+  </div>
+  <div class="opts" id="opts-wrap"></div>
+  <div class="type-wrap" id="type-wrap" style="display:none">
+    <input type="text" class="type-input" id="type-input" placeholder="1語だけ入力してください" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div class="type-hint">※1語のみ・スペル注意・短縮形不可（don't → do not）</div>
+  </div>
+  <div class="expl" id="expl"></div>
+  <div class="act-row" id="act-row"></div>
+</div>
+
+<!-- REVIEW -->
+<div id="review">
+  <div class="rv-emoji" id="rv-e">🎉</div>
+  <div class="rv-title" id="rv-t">結果</div>
+  <div class="rv-pct" id="rv-p">0%</div>
+  <div class="rv-meta" id="rv-m"></div>
+  <div class="by-part" id="by-part"></div>
+  <button class="retry-btn" onclick="retryWrong()">❌ 間違えた問題だけ再挑戦</button>
+  <div class="wrongs-title" id="wrongs-title"></div>
+  <div id="wlist"></div>
+  <button class="home-btn" onclick="goHome()">⌂ ホームに戻る</button>
+</div>
+
+<script>
+// ============================================================
+// QUESTION BANK — 30 questions (10 Part1 / 10 Part2 / 10 Part3)
+// ============================================================
+const QB = [
+
+// ── PART 1: Short dialogue, 4-choice (grammar / vocabulary / implied meaning) ──
+{
+  id:'p1_1', part:1,
+  meta:'文法 · 時制',
+  dialogue:[
+    {s:'A', t:'Have you heard? The company _____ its new headquarters next month.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  highlight: null,
+  opts:['is opening','has opened','had opened','was opening'],
+  ans:'is opening',
+  hint:'next month → 確定した未来の予定',
+  expl:'確定した近い未来の予定には現在進行形（is opening）を使う。"next month" が未来を示す。',
+  jp:'確定した予定には現在進行形。"next month" が未来を指すヒント。'
+},
+{
+  id:'p1_2', part:1,
+  meta:'語彙 · コロケーション',
+  dialogue:[
+    {s:'A', t:'I didn\'t _____ well on the test, so I have to resit it.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['make','do','take','pass'],
+  ans:'do',
+  hint:'"do well" = うまくやる・好成績を取る（固定コロケーション）',
+  expl:'"do well on a test" は固定コロケーション。"make well" は存在しない。',
+  jp:'"do well" はテストや仕事で好成績を収めることを表す最頻出コロケーション。'
+},
+{
+  id:'p1_3', part:1,
+  meta:'文法 · 仮定法',
+  dialogue:[
+    {s:'A', t:'If I _____ the deadline, I wouldn\'t have lost the contract.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['met','had met','would meet','have met'],
+  ans:'had met',
+  hint:'"would have lost" → 仮定法過去完了 → If + had + p.p.',
+  expl:'仮定法過去完了: If + had + p.p. / would have + p.p.「あの時〜していたら」という過去の後悔・反実仮想。',
+  jp:'帰結節が "would have lost" → If節は had met（仮定法過去完了）。'
+},
+{
+  id:'p1_4', part:1,
+  meta:'語彙 · 前置詞',
+  dialogue:[
+    {s:'A', t:'She\'s really good _____ dealing with difficult customers.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['in','for','at','with'],
+  ans:'at',
+  hint:'"be good at" = 〜が得意（固定コロケーション）',
+  expl:'"be good at" + -ing = 〜が得意。能力・スキルには at を使う。',
+  jp:'"be good at" は能力・スキルに使う最重要コロケーション。前置詞 at を必ず使う。'
+},
+{
+  id:'p1_5', part:1,
+  meta:'文法 · 倒置',
+  dialogue:[
+    {s:'A', t:'_____ had we sat down when the presentation started.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['Scarcely','Only','Just','Even'],
+  ans:'Scarcely',
+  hint:'"Scarcely had S + p.p. when ..." = 〜するやいなや（倒置）',
+  expl:'"Scarcely / Hardly / No sooner had S + p.p. when/than ..." = 〜するやいなや。文頭に来ると倒置が起きる。',
+  jp:'Scarcely が文頭 → 倒置（had we）。"No sooner had ... than" と同じ構造。'
+},
+{
+  id:'p1_6', part:1,
+  meta:'語彙 · 含意',
+  dialogue:[
+    {s:'A', t:'The report was submitted on time, _____ the power outage.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['despite','although','because of','even'],
+  ans:'despite',
+  hint:'"despite + 名詞（句）" = 〜にもかかわらず',
+  expl:'"despite" + 名詞句。"although" は節（SV）と使う接続詞なのでここでは不可。',
+  jp:'"despite + 名詞" vs "although + SV"の区別。ここは "the power outage"（名詞）なので despite。'
+},
+{
+  id:'p1_7', part:1,
+  meta:'文法 · 関係詞',
+  dialogue:[
+    {s:'A', t:'The professor _____ research has influenced thousands of students was awarded an honorary degree.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['which','who','whose','whom'],
+  ans:'whose',
+  hint:'"whose" = 〜の（所有格の関係代名詞）',
+  expl:'"whose research" = 〜の研究（所有格）。人・物どちらにも使える所有格の関係代名詞。',
+  jp:'"whose + 名詞" = 所有格の関係代名詞。"The professor whose research ..." = 研究が〜の教授。'
+},
+{
+  id:'p1_8', part:1,
+  meta:'語彙 · コロケーション',
+  dialogue:[
+    {s:'A', t:'The new law will _____ a significant impact on small businesses.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['make','do','have','bring'],
+  ans:'have',
+  hint:'"have an impact on" = 〜に影響を与える（固定コロケーション）',
+  expl:'"have an impact/effect on" = 〜に影響を与える。"make impact" は×。',
+  jp:'"impact" の前の動詞は "have"。"make an impact" も可だが "have an impact on" が最も一般的。'
+},
+{
+  id:'p1_9', part:1,
+  meta:'文法 · 仮定法',
+  dialogue:[
+    {s:'A', t:'It\'s high time the government _____ something about air pollution.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['does','did','has done','do'],
+  ans:'did',
+  hint:'"It\'s (high) time + S + 過去形" = そろそろ〜すべき',
+  expl:'"It\'s high time + S + 過去形" は仮定法的用法。「そろそろ〜すべきだ」という焦りや批判を含む。',
+  jp:'"It\'s high time" の後は必ず過去形（仮定法）。現在の話でも did を使う。'
+},
+{
+  id:'p1_10', part:1,
+  meta:'語彙 · 前置詞フレーズ',
+  dialogue:[
+    {s:'A', t:'She managed to achieve her goals _____ all the setbacks she faced.'},
+  ],
+  prompt:'空欄に入る最も適切な語句を選んでください。',
+  opts:['in spite of','even though','however','because'],
+  ans:'in spite of',
+  hint:'"in spite of + 名詞（句）" = 〜にもかかわらず（despite の同義語）',
+  expl:'"in spite of" = "despite" と同義で名詞句と使う。"even though / although" は節（SV）と使う。',
+  jp:'"in spite of" + 名詞句。"even though" は接続詞なので後に SV が必要。'
+},
+
+// ── PART 2: What does X mean? (implied meaning) ──
+{
+  id:'p2_1', part:2,
+  meta:'含意読取 · 慣用表現',
+  dialogue:[
+    {s:'A', t:'Are you going to the team meeting on Friday?'},
+    {s:'B', t:'I wouldn\'t miss it for the world.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B is not sure whether they can attend.',
+    'B definitely plans to be there.',
+    'B thinks the meeting is not important.',
+  ],
+  ans:'B definitely plans to be there.',
+  hint:'"I wouldn\'t miss it for the world" = 絶対に行く（強い肯定の慣用句）',
+  expl:'"I wouldn\'t miss it for the world" = 絶対に見逃さない・必ず行く。世界中の何と引き換えにしても行きたい、という強い意欲を表す慣用句。',
+  jp:'"miss it" = 逃す。"for the world" = たとえ世界中のものと引き換えにしても。→ 絶対に行く。'
+},
+{
+  id:'p2_2', part:2,
+  meta:'含意読取 · 丁寧な断り',
+  dialogue:[
+    {s:'A', t:'Would you like to join us for dinner tonight?'},
+    {s:'B', t:'I\'d love to, but I\'m afraid I\'ve already made other arrangements.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B accepts the invitation enthusiastically.',
+    'B wants to go but has a prior commitment.',
+    'B is angry about the last-minute invitation.',
+  ],
+  ans:'B wants to go but has a prior commitment.',
+  hint:'"I\'d love to, but ..." = 行きたい気持ちはあるが断る（丁寧な断り）',
+  expl:'"I\'d love to" = 行きたい（気持ちはある）。"but I\'m afraid" = しかし残念ながら。"other arrangements" = 先約。→ 行きたいが先約があって断っている。',
+  jp:'"I\'d love to" で行きたい気持ちを示しつつ "but" でやんわり断る。英国英語の丁寧な断り方の典型。'
+},
+{
+  id:'p2_3', part:2,
+  meta:'含意読取 · 強い同意',
+  dialogue:[
+    {s:'A', t:'That meeting went on forever, didn\'t it? I thought it would never end.'},
+    {s:'B', t:'You can say that again.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B wants A to repeat what was just said.',
+    'B strongly agrees with A.',
+    'B thinks A is being too critical.',
+  ],
+  ans:'B strongly agrees with A.',
+  hint:'"You can say that again" = まったくその通り（完全同意）',
+  expl:'"You can say that again" = 全くその通り（= I completely agree）。直訳は「もう一度言っても構わない」だが、実際は「まさにおっしゃる通り」という強い同意を表す慣用句。',
+  jp:'直訳すると「またそれを言ってもいい」→ 転じて「まったくその通り！」という強い同意。'
+},
+{
+  id:'p2_4', part:2,
+  meta:'含意読取 · 婉曲表現',
+  dialogue:[
+    {s:'A', t:'How did you find the new restaurant?'},
+    {s:'B', t:'Let\'s just say it wasn\'t quite what I was hoping for.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B is being diplomatic — the restaurant was disappointing.',
+    'B thought the restaurant was excellent.',
+    'B is unsure about the quality of the restaurant.',
+  ],
+  ans:'B is being diplomatic — the restaurant was disappointing.',
+  hint:'"Let\'s just say ..." = 本音を婉曲に伝える表現',
+  expl:'"Let\'s just say ..." = 直接言わずに遠回しに本音を伝える表現。"not quite what I was hoping for" = 期待通りではなかった → つまりがっかりしたということ。',
+  jp:'"Let\'s just say ..." はネガティブな評価を礼儀正しく伝えるときに使う定番表現。'
+},
+{
+  id:'p2_5', part:2,
+  meta:'含意読取 · 不確実な約束',
+  dialogue:[
+    {s:'A', t:'Could you possibly review my draft by Thursday?'},
+    {s:'B', t:'I\'ll see what I can do.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B will definitely review it by Thursday.',
+    'B is refusing the request.',
+    'B will try but cannot make a firm commitment.',
+  ],
+  ans:'B will try but cannot make a firm commitment.',
+  hint:'"I\'ll see what I can do" = やってみる（確約ではない）',
+  expl:'"I\'ll see what I can do" = できるかどうか見てみる。努力はするが保証はできないというニュアンス。断りでも承諾でもない、曖昧な返答。',
+  jp:'"I\'ll see what I can do" = 「できる範囲でやってみる」。Yes でも No でもない、英語特有の曖昧な答え方。'
+},
+{
+  id:'p2_6', part:2,
+  meta:'含意読取 · 皮肉',
+  dialogue:[
+    {s:'A', t:'At least the project was only three months over deadline.'},
+    {s:'B', t:'Oh, great comfort that is.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean in the SECOND comment?',
+  opts:[
+    'B is genuinely comforted by this information.',
+    'B thinks this offers very little comfort.',
+    'B is surprised the delay was so short.',
+  ],
+  ans:'B thinks this offers very little comfort.',
+  hint:'"Great comfort that is" = 皮肉（実際はまったく慰めにならない）',
+  expl:'"Great comfort that is!" は皮肉（irony / sarcasm）。「それは大した慰めだこと」→ 実際にはまったく慰めにならないという批判的な意味。',
+  jp:'語順の倒置（That is great comfort → Great comfort that is）が皮肉を強調する典型的な英国英語の表現。'
+},
+{
+  id:'p2_7', part:2,
+  meta:'含意読取 · 決断',
+  dialogue:[
+    {s:'A', t:'Are you really going to quit your job to start a business?'},
+    {s:'B', t:'I\'ve been thinking about it for over a year. My mind is made up.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B is still weighing up the options.',
+    'B has reached a firm decision.',
+    'B is asking for A\'s advice.',
+  ],
+  ans:'B has reached a firm decision.',
+  hint:'"My mind is made up" = 決心は固まった（変わらない）',
+  expl:'"My mind is made up" = もう決断した。考えは変わらない。"make up one\'s mind" = 決心する。1年以上考えてきた → 確固たる決意。',
+  jp:'"make up one\'s mind" = 決心する。"My mind is made up" = 決意は固まった・もう決めた。'
+},
+{
+  id:'p2_8', part:2,
+  meta:'含意読取 · 秘密の共有',
+  dialogue:[
+    {s:'A', t:'Do you think Sarah will get promoted this year?'},
+    {s:'B', t:'Between you and me, I think it\'s a long shot.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B is sharing a private opinion that Sarah\'s chances are low.',
+    'B thinks Sarah is the best candidate for promotion.',
+    'B doesn\'t know Sarah well enough to comment.',
+  ],
+  ans:'B is sharing a private opinion that Sarah\'s chances are low.',
+  hint:'"Between you and me" = ここだけの話。"a long shot" = 可能性が低いこと',
+  expl:'"Between you and me" = 内緒の話・ここだけの話（秘密の共有）。"a long shot" = 可能性が非常に低いこと。→ B は Sarah の昇進の可能性が低いと内緒で伝えている。',
+  jp:'"a long shot" = 的に遠い射撃 → 当たる可能性が低い → 見込みの薄いこと。'
+},
+{
+  id:'p2_9', part:2,
+  meta:'含意読取 · 遠回しな励まし',
+  dialogue:[
+    {s:'A', t:'Should I apply for the senior position? I\'m not sure I\'m ready.'},
+    {s:'B', t:'It\'s not for me to say, but you\'ve certainly got the experience.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B is indirectly encouraging A to apply.',
+    'B thinks A is not qualified enough.',
+    'B refuses to give any opinion.',
+  ],
+  ans:'B is indirectly encouraging A to apply.',
+  hint:'"It\'s not for me to say, but ..." = 私が言うことではないが…（婉曲的アドバイス）',
+  expl:'"It\'s not for me to say" = 私が口出しすることではないが。その後に "you\'ve certainly got the experience"（経験は十分ある）と肯定的なことを言う → 間接的に応募を勧めている。',
+  jp:'英国英語では直接アドバイスするより "It\'s not for me to say, but ..." と前置きしてから意見を伝えることが多い。'
+},
+{
+  id:'p2_10', part:2,
+  meta:'含意読取 · 変化への同意',
+  dialogue:[
+    {s:'A', t:'I can\'t believe how much the city centre has changed in the last decade.'},
+    {s:'B', t:'You\'re not wrong there. It\'s almost unrecognizable.'},
+  ],
+  highlight:'B',
+  prompt:'What does B mean?',
+  opts:[
+    'B disagrees with A\'s assessment.',
+    'B strongly agrees with A.',
+    'B thinks the changes have been mostly negative.',
+  ],
+  ans:'B strongly agrees with A.',
+  hint:'"You\'re not wrong" = 間接的な強い同意（= You\'re absolutely right）',
+  expl:'"You\'re not wrong" = 「あなたは間違っていない」= 全くその通り。二重否定で強い同意を表す英国英語の表現。"unrecognizable" = 見分けがつかないほど変わった → 変化の大きさを強調。',
+  jp:'二重否定（not wrong = right）が強い同意を表す。英国英語でよく使う間接的な表現。'
+},
+
+// ── PART 3: Open Cloze (1語記入) ──
+// Each passage has 2 gaps = 10 questions across 5 passages
+{
+  id:'p3_1a', part:3,
+  meta:'Open Cloze · パッセージA（映画レビュー）— Gap 1',
+  passageId:'A',
+  passage:'Movie Review: Night Shift\n\nThis gripping thriller is easily (0)[ONE] of the most tense films of the year. The director, (G1)[___] debut feature this is, demonstrates a remarkable confidence behind the camera. No sooner (G2)[___] the opening scene begun than you feel the tension rising.',
+  gapId:'G1',
+  gapNum:1,
+  gapLabel:'(G1) の空欄に1語を入れてください',
+  gapContext:'"the director, _____ debut feature this is" → 所有格の関係代名詞',
+  ans:'whose',
+  alt:[],
+  hint:'"the director, _____ debut feature" → 所有格（= the director\'s debut feature）',
+  expl:'"whose debut feature this is" = このデビュー作品が誰のものかを示す所有格の関係代名詞。"the director whose debut feature ..." = デビュー作がこの映画である監督。',
+  jp:'"whose" = 〜の（所有格の関係代名詞）。"the director\'s debut feature" を関係詞節で表すと "whose debut feature"。'
+},
+{
+  id:'p3_1b', part:3,
+  meta:'Open Cloze · パッセージA（映画レビュー）— Gap 2',
+  passageId:'A',
+  passage:'Movie Review: Night Shift\n\nThis gripping thriller is easily (0)[ONE] of the most tense films of the year. The director, (G1)[WHOSE] debut feature this is, demonstrates a remarkable confidence behind the camera. No sooner (G2)[___] the opening scene begun than you feel the tension rising.',
+  gapId:'G2',
+  gapNum:2,
+  gapLabel:'(G2) の空欄に1語を入れてください',
+  gapContext:'"No sooner _____ the opening scene begun than ..." → 倒置の助動詞',
+  ans:'had',
+  alt:[],
+  hint:'"No sooner had S + p.p. than ..." の倒置形 → 助動詞は？',
+  expl:'"No sooner had S + p.p. than ..." = 〜するやいなや。No sooner が文頭に来ると倒置（had + 主語）が起きる。',
+  jp:'"No sooner had the scene begun than ..." = シーンが始まるやいなや。had を入れる。'
+},
+{
+  id:'p3_2a', part:3,
+  meta:'Open Cloze · パッセージB（旅行記）— Gap 1',
+  passageId:'B',
+  passage:'Exploring Kyoto\n\nDespite (0)[BEING] one of Japan\'s most visited cities, Kyoto still manages to feel (G1)[___] from the modern world in its quieter neighbourhoods. It is (G2)[___] if the old and new exist side by side, each respecting the other.',
+  gapId:'G1',
+  gapNum:1,
+  gapLabel:'(G1) の空欄に1語を入れてください',
+  gapContext:'"feel _____ from the modern world" → 切り離されている・遠い',
+  ans:'removed',
+  alt:['detached','separate'],
+  hint:'"feel _____ from the modern world" = 現代社会から切り離された感覚',
+  expl:'"feel removed from" = 〜から切り離されたように感じる。"detached from" も可。文脈：賑やかな観光地なのに、静かな地区では現代から離れた感覚がある。',
+  jp:'"removed from" = 〜から切り離された。"detached / separate" も正解として採点される。'
+},
+{
+  id:'p3_2b', part:3,
+  meta:'Open Cloze · パッセージB（旅行記）— Gap 2',
+  passageId:'B',
+  passage:'Exploring Kyoto\n\nDespite (0)[BEING] one of Japan\'s most visited cities, Kyoto still manages to feel (G1)[REMOVED] from the modern world in its quieter neighbourhoods. It is (G2)[___] if the old and new exist side by side, each respecting the other.',
+  gapId:'G2',
+  gapNum:2,
+  gapLabel:'(G2) の空欄に1語を入れてください',
+  gapContext:'"It is _____ if ..." = まるで〜のようだ',
+  ans:'as',
+  alt:[],
+  hint:'"It is as if ..." = まるで〜のようだ（固定表現）',
+  expl:'"It is as if ..." = まるで〜のようだ（= It is as though ...）。古いものと新しいものが共存しているように見える、という比喩表現。',
+  jp:'"as if / as though" = まるで〜のように。"It is as if ..." は比喩の定番表現。'
+},
+{
+  id:'p3_3a', part:3,
+  meta:'Open Cloze · パッセージC（科学記事）— Gap 1',
+  passageId:'C',
+  passage:'Sleep and the Brain\n\nScientists have long known that sleep plays a (0)[CRUCIAL] role in memory consolidation. What (G1)[___] less well understood, however, is precisely how different sleep stages contribute to this process. Research conducted (G2)[___] the past decade has shed considerable light on the matter.',
+  gapId:'G1',
+  gapNum:1,
+  gapLabel:'(G1) の空欄に1語を入れてください',
+  gapContext:'"What _____ less well understood" → What で始まる主語節 + be動詞',
+  ans:'is',
+  alt:['remains'],
+  hint:'"What _____ less well understood" = 〜はあまりよく理解されていない（What節が主語）',
+  expl:'"What is less well understood" = あまりよく理解されていないことは。"What" が主語節を作り、be動詞 "is" が必要。"What remains less understood" も可。',
+  jp:'"What is X" = 〜なのは何か（what節が主語）。"What is less understood" = 理解が進んでいないのは。'
+},
+{
+  id:'p3_3b', part:3,
+  meta:'Open Cloze · パッセージC（科学記事）— Gap 2',
+  passageId:'C',
+  passage:'Sleep and the Brain\n\nScientists have long known that sleep plays a (0)[CRUCIAL] role in memory consolidation. What (G1)[IS] less well understood, however, is precisely how different sleep stages contribute to this process. Research conducted (G2)[___] the past decade has shed considerable light on the matter.',
+  gapId:'G2',
+  gapNum:2,
+  gapLabel:'(G2) の空欄に1語を入れてください',
+  gapContext:'"conducted _____ the past decade" → 過去10年間にわたって（時間の前置詞）',
+  ans:'over',
+  alt:['during','throughout'],
+  hint:'"_____ the past decade" = 過去10年間にわたって',
+  expl:'"over the past decade" = 過去10年間にわたって（継続的な期間）。"during the past decade" も可。"in the past decade" も使われる。',
+  jp:'"over the past decade" = この10年間で。"over" は「〜の期間にわたって」という継続を示す。'
+},
+{
+  id:'p3_4a', part:3,
+  meta:'Open Cloze · パッセージD（ビジネスコラム）— Gap 1',
+  passageId:'D',
+  passage:'The Power of Feedback\n\nEffective feedback is (0)[ONE] of the most valuable tools a manager can offer. It is worth (G1)[___] that feedback should always be specific and actionable, not vague and general. (G2)[___] you focus on behaviours rather than personality, feedback becomes far less threatening.',
+  gapId:'G1',
+  gapNum:1,
+  gapLabel:'(G1) の空欄に1語を入れてください',
+  gapContext:'"It is worth _____ that ..." = 〜ということは注目に値する',
+  ans:'noting',
+  alt:['remembering','mentioning'],
+  hint:'"It is worth + -ing" = 〜することは価値がある（固定表現）',
+  expl:'"It is worth noting that ..." = 〜ということは注目に値する・留意すべきことは。"worth" の後は動名詞（-ing 形）が必要。',
+  jp:'"It is worth noting / mentioning / remembering that ..." はアカデミック英語の頻出表現。'
+},
+{
+  id:'p3_4b', part:3,
+  meta:'Open Cloze · パッセージD（ビジネスコラム）— Gap 2',
+  passageId:'D',
+  passage:'The Power of Feedback\n\nEffective feedback is (0)[ONE] of the most valuable tools a manager can offer. It is worth (G1)[NOTING] that feedback should always be specific and actionable, not vague and general. (G2)[___] you focus on behaviours rather than personality, feedback becomes far less threatening.',
+  gapId:'G2',
+  gapNum:2,
+  gapLabel:'(G2) の空欄に1語を入れてください',
+  gapContext:'"_____ you focus on behaviours, feedback becomes ..." → 条件',
+  ans:'If',
+  alt:['When','Provided','Whenever'],
+  hint:'"_____ you focus on X, Y becomes ..." → 条件を表す接続詞',
+  expl:'"If you focus on behaviours ..." = 行動に焦点を当てれば。"When / Whenever / Provided" も文法的に可。文脈：条件（行動に焦点を当てる）→ 結果（脅威的でなくなる）。',
+  jp:'"If / When / Provided that" + 条件節。ここでは If が最も自然だが他も採点対象。'
+},
+{
+  id:'p3_5a', part:3,
+  meta:'Open Cloze · パッセージE（環境コラム）— Gap 1',
+  passageId:'E',
+  passage:'Urban Green Spaces\n\nCities around the world are beginning to recognise the (0)[VALUE] of green spaces. Not only (G1)[___] parks improve air quality, but they also reduce the urban heat island effect. It has been estimated that trees planted in city centres can lower local temperatures (G2)[___] as much as 5 degrees.',
+  gapId:'G1',
+  gapNum:1,
+  gapLabel:'(G1) の空欄に1語を入れてください',
+  gapContext:'"Not only _____ parks improve ..." → Not only の倒置',
+  ans:'do',
+  alt:[],
+  hint:'"Not only do / does / did + S + V ..." → Not only が文頭に来ると倒置',
+  expl:'"Not only do parks improve ..." = 公園は〜を改善するだけでなく。Not only が文頭 → 倒置（do + 主語 + 動詞の原形）。現在の事実なので do（parks = 複数形）。',
+  jp:'"Not only" が文頭 → 助動詞を前に出す倒置。主語が parks（複数）で現在形 → do。'
+},
+{
+  id:'p3_5b', part:3,
+  meta:'Open Cloze · パッセージE（環境コラム）— Gap 2',
+  passageId:'E',
+  passage:'Urban Green Spaces\n\nCities around the world are beginning to recognise the (0)[VALUE] of green spaces. Not only (G1)[DO] parks improve air quality, but they also reduce the urban heat island effect. It has been estimated that trees planted in city centres can lower local temperatures (G2)[___] as much as 5 degrees.',
+  gapId:'G2',
+  gapNum:2,
+  gapLabel:'(G2) の空欄に1語を入れてください',
+  gapContext:'"lower temperatures _____ as much as 5 degrees" → 「最大5度も」という表現',
+  ans:'by',
+  alt:[],
+  hint:'"lower temperatures _____ 5 degrees" = 気温を5度下げる（変化量の前置詞）',
+  expl:'"by as much as 5 degrees" = 最大5度も（変化量を示す by）。"reduce by 20%" "increase by 5°" など、変化の量を示す場合は by を使う。',
+  jp:'変化量（差）を示すときは "by" を使う。"lower by 5°" = 5度低下させる。'
+},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let questions = [], idx = 0, selected = null, revealed = false;
+let results = [], streak = 0, bestStreak = 0;
+let filterPart = 'all';
+let typedAnswer = '';
+
+const PART_COLORS = {
+  1: {bg:'var(--p1-l)', color:'var(--p1)', bar:'#4A6FA5'},
+  2: {bg:'var(--p2-l)', color:'var(--p2)', bar:'#7B4FA5'},
+  3: {bg:'var(--p3-l)', color:'var(--p3)', bar:'#2D7D6F'},
+};
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function setFilter(val, btn){
+  filterPart = val;
+  document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function show(id){ ['home','drill','review'].forEach(s=>document.getElementById(s).style.display='none'); document.getElementById(id).style.display='flex'; window.scrollTo(0,0);}
+
+function goHome(){ show('home'); }
+
+function startDrill(){
+  let qs = [...QB];
+  if(filterPart !== 'all') qs = qs.filter(q=>String(q.part)===filterPart);
+  questions = shuffle(qs);
+  idx=0; results=[]; streak=0; bestStreak=0; selected=null; revealed=false;
+  show('drill');
+  renderQ();
+}
+
+function retryWrong(){
+  const wrongIds = results.filter(r=>!r.correct).map(r=>r.id);
+  if(!wrongIds.length){ goHome(); return; }
+  questions = shuffle(QB.filter(q=>wrongIds.includes(q.id)));
+  idx=0; results=[]; streak=0; revealed=false; selected=null;
+  show('drill');
+  renderQ();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderQ(){
+  if(idx >= questions.length){ showReview(); return; }
+  const q = questions[idx];
+  const total = questions.length;
+  const correct = results.filter(r=>r.correct).length;
+  const wrong = results.filter(r=>!r.correct).length;
+
+  document.getElementById('q-ctr').textContent = `${idx+1} / ${total}`;
+  const pct = idx/total*100;
+  const pf = document.getElementById('prog-fill');
+  pf.style.width = pct+'%';
+  pf.style.background = PART_COLORS[q.part].bar;
+  document.getElementById('sc-ok').textContent = `✓ ${correct}`;
+  document.getElementById('sc-ng').textContent = `✗ ${wrong}`;
+  const sd = document.getElementById('streak-d');
+  sd.textContent = `🔥 ${streak}`;
+  sd.style.background = streak>=3 ? 'var(--amber-l)' : '#F3F4F6';
+  sd.style.color = streak>=3 ? 'var(--amber)' : 'var(--gray)';
+
+  // Part label
+  const pl = document.getElementById('pl-inner');
+  const pc = PART_COLORS[q.part];
+  pl.style.background = pc.bg;
+  pl.style.color = pc.color;
+  pl.textContent = `PART ${q.part} — ${q.part===1?'4択（文法・語彙）':q.part===2?'含意読取（What does X mean?）':'Open Cloze（1語記入）'}`;
+
+  // Card
+  document.getElementById('q-meta').textContent = q.meta;
+  renderBody(q);
+
+  // Options / input
+  const ow = document.getElementById('opts-wrap');
+  const tw = document.getElementById('type-wrap');
+  const ti = document.getElementById('type-input');
+  if(q.part===3){
+    ow.style.display='none';
+    tw.style.display='block';
+    ti.value=''; ti.className='type-input'; ti.disabled=false;
+    typedAnswer='';
+    ti.oninput = ()=>{ typedAnswer=ti.value.trim(); document.getElementById('cbtn')?document.getElementById('cbtn').disabled=!typedAnswer:null; };
+    ti.onkeydown = (e)=>{ if(e.key==='Enter' && typedAnswer && !revealed) revealAnswer(); };
+  } else {
+    tw.style.display='none';
+    ow.style.display='flex';
+    renderOpts(q);
+  }
+
+  // Expl
+  const ex = document.getElementById('expl');
+  ex.style.display='none'; ex.className='expl';
+
+  // Hint
+  const hb = document.querySelector('.hint-box');
+  if(hb) hb.style.display='none';
+
+  // Action
+  document.getElementById('act-row').innerHTML =
+    `<button class="hint-btn" onclick="showHint()">💡 ヒント</button>`+
+    `<button class="check-btn" id="cbtn" disabled onclick="revealAnswer()">答え合わせ</button>`;
+
+  selected=null; revealed=false;
+}
+
+function renderBody(q){
+  const body = document.getElementById('q-body');
+  if(q.part===1){
+    // Single dialogue with blank
+    const line = q.dialogue[0];
+    const text = line.t.replace('_____','<span class="gap-span" id="bsp">___</span>');
+    body.innerHTML = `<div class="dialogue-box"><div class="dialogue-line"><span class="dl-speaker">${line.s}:</span><span class="dl-text">${text}</span></div></div><div class="q-prompt">${q.prompt}</div>`;
+  } else if(q.part===2){
+    // Multi-line dialogue with highlight
+    let html = '<div class="dialogue-box">';
+    q.dialogue.forEach(line=>{
+      const cls = line.s===q.highlight ? 'dl-text highlight' : 'dl-text';
+      html += `<div class="dialogue-line"><span class="dl-speaker">${line.s}:</span><span class="${cls}">${line.t}</span></div>`;
+    });
+    html += '</div>';
+    html += `<div class="q-prompt">👉 ${q.prompt}</div>`;
+    body.innerHTML = html;
+  } else {
+    // Part 3: passage with gaps shown
+    let passageHtml = q.passage
+      .replace(/\n/g,'<br>')
+      .replace(/\(0\)\[([^\]]+)\]/g,'<span class="gap-span ok" style="pointer-events:none">$1</span>')
+      .replace(/\(G\d\)\[([^\]]+)\]/g, (m,p1)=>{
+        if(p1==='___') return `<span class="gap-span" id="bsp">___</span>`;
+        return `<span class="gap-span ok" style="pointer-events:none">${p1}</span>`;
+      });
+    body.innerHTML = `<div class="passage-box">${passageHtml}</div><div class="gap-label">✏️ ${q.gapLabel}</div><div class="hint-box" style="display:none">💡 ヒント: ${q.hint}</div>`;
+  }
+  if(q.part!==3){
+    body.insertAdjacentHTML('beforeend','<div class="hint-box" style="display:none">💡 ヒント: '+q.hint+'</div>');
+  }
+}
+
+function renderOpts(q){
+  const ow = document.getElementById('opts-wrap');
+  ow.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className='opt';
+    btn.dataset.val=opt;
+    btn.innerHTML=`<span class="opt-c">${String.fromCharCode(65+i)}</span>${opt}`;
+    btn.onclick=()=>selectOpt(opt,btn,q);
+    ow.appendChild(btn);
+  });
+}
+
+function selectOpt(opt, btn, q){
+  if(revealed) return;
+  selected=opt;
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  if(q.part===1){
+    const bsp=document.getElementById('bsp');
+    if(bsp){bsp.textContent=opt;bsp.className='gap-span filled';}
+  }
+  const cbtn=document.getElementById('cbtn');
+  if(cbtn) cbtn.disabled=false;
+}
+
+function showHint(){
+  const hb=document.querySelector('.hint-box');
+  if(hb){ hb.style.display='block'; }
+  const hbtn=document.querySelector('.hint-btn');
+  if(hbtn) hbtn.disabled=true;
+}
+
+function normalise(s){ return s.toLowerCase().replace(/[.,!?']/g,'').trim(); }
+
+function revealAnswer(){
+  if(revealed) return;
+  const q=questions[idx];
+  let userAnswer, isCorrect;
+
+  if(q.part===3){
+    userAnswer = typedAnswer;
+    const accepted = [q.ans, ...(q.alt||[])].map(normalise);
+    isCorrect = accepted.includes(normalise(userAnswer));
+    const ti=document.getElementById('type-input');
+    ti.disabled=true;
+    ti.className='type-input '+(isCorrect?'ok':'ng');
+    const bsp=document.getElementById('bsp');
+    if(bsp){ bsp.textContent=userAnswer||'（未入力）'; bsp.className='gap-span '+(isCorrect?'ok':'ng'); }
+    // show correct answer in passage if wrong
+    if(!isCorrect){
+      const bsp2=document.getElementById('bsp');
+      if(bsp2) bsp2.title=`正解: ${q.ans}`;
+    }
+  } else {
+    userAnswer = selected;
+    isCorrect = userAnswer === q.ans;
+    document.querySelectorAll('.opt').forEach((btn,i)=>{
+      const v=q.opts[i]; btn.classList.remove('sel');
+      if(v===q.ans){ btn.classList.add('ok'); btn.querySelector('.opt-c').textContent='✓'; }
+      else if(v===userAnswer && !isCorrect){ btn.classList.add('ng'); btn.querySelector('.opt-c').textContent='✗'; }
+      btn.onclick=null;
+    });
+    const bsp=document.getElementById('bsp');
+    if(bsp){ bsp.className='gap-span '+(isCorrect?'ok':'ng'); if(q.part===1) bsp.textContent=q.ans; }
+  }
+
+  revealed=true;
+  results.push({id:q.id, part:q.part, correct:isCorrect});
+  if(isCorrect){ streak++; if(streak>bestStreak) bestStreak=streak; }
+  else { streak=0; }
+
+  // streak display
+  const sd=document.getElementById('streak-d');
+  sd.textContent=`🔥 ${streak}`;
+  sd.style.background=streak>=3?'var(--amber-l)':'#F3F4F6';
+  sd.style.color=streak>=3?'var(--amber)':'var(--gray)';
+
+  // show hint
+  const hb=document.querySelector('.hint-box');
+  if(hb) hb.style.display='block';
+
+  // explanation
+  const ex=document.getElementById('expl');
+  ex.className='expl '+(isCorrect?'ok':'ng');
+  let explHtml=`<div class="expl-hd">${isCorrect?'✓ 正解！':'✗ 不正解。正解: '+q.ans}</div>${q.expl}`;
+  if(q.jp) explHtml+=`<div class="expl-jp">🇯🇵 ${q.jp}</div>`;
+  ex.innerHTML=explHtml;
+  ex.style.display='block';
+
+  // update score
+  const correct=results.filter(r=>r.correct).length;
+  const wrong=results.filter(r=>!r.correct).length;
+  document.getElementById('sc-ok').textContent=`✓ ${correct}`;
+  document.getElementById('sc-ng').textContent=`✗ ${wrong}`;
+
+  const isLast=idx+1>=questions.length;
+  document.getElementById('act-row').innerHTML=
+    `<button class="next-btn" onclick="nextQ()">${isLast?'結果を見る →':'次の問題 →'}</button>`;
+}
+
+function nextQ(){
+  if(idx+1>=questions.length){ showReview(); return; }
+  idx++;
+  renderQ();
+}
+
+// ============================================================
+// REVIEW
+// ============================================================
+function showReview(){
+  show('review');
+  const total=results.length;
+  const correct=results.filter(r=>r.correct).length;
+  const pct=total?Math.round(correct/total*100):0;
+
+  document.getElementById('rv-e').textContent=pct>=80?'🎉':pct>=50?'📚':'💪';
+  document.getElementById('rv-t').textContent=`結果: ${correct} / ${total}`;
+  document.getElementById('rv-p').textContent=pct+'%';
+  document.getElementById('rv-p').style.color=pct>=80?'var(--green)':pct>=50?'var(--amber)':'var(--red)';
+  document.getElementById('rv-m').innerHTML=`🔥 最大連続正解: ${bestStreak}問`;
+
+  // By part stats
+  const byPart=document.getElementById('by-part');
+  byPart.innerHTML='<div class="by-part-title">📊 パート別成績</div>';
+  [1,2,3].forEach(p=>{
+    const pr=results.filter(r=>r.part===p);
+    if(!pr.length) return;
+    const pc2=Math.round(pr.filter(r=>r.correct).length/pr.length*100);
+    const col=PART_COLORS[p];
+    byPart.innerHTML+=`<div class="bpt-row">
+      <span class="bpt-label" style="color:${col.color}">Part ${p}</span>
+      <div class="bpt-bar"><div class="bpt-fill" style="width:${pc2}%;background:${col.bar}"></div></div>
+      <span class="bpt-pct" style="color:${col.color}">${pc2}%</span>
+    </div>`;
+  });
+
+  // Wrong list
+  const wrongIds=results.filter(r=>!r.correct).map(r=>r.id);
+  const wl=document.getElementById('wlist');
+  const wt=document.getElementById('wrongs-title');
+  wl.innerHTML='';
+  if(!wrongIds.length){ wt.textContent='🏆 全問正解！素晴らしい！'; return; }
+  wt.textContent=`❌ 間違えた問題 (${wrongIds.length}問) — 要復習`;
+  wrongIds.forEach(id=>{
+    const q=QB.find(x=>x.id===id); if(!q) return;
+    const pc=PART_COLORS[q.part];
+    const d=document.createElement('div');
+    d.className='wc';
+    d.innerHTML=
+      `<span class="wc-type" style="background:${pc.bg};color:${pc.color}">PART ${q.part}</span>`+
+      `<div class="wc-q">${q.meta}</div>`+
+      `<div class="wc-ans">正解: ${q.ans}</div>`+
+      `<div class="wc-expl">💡 ${q.expl}</div>`;
+    wl.appendChild(d);
+  });
+}
+</script>
+</body>
+</html>

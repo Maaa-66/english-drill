@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="英語ドリル">
+<title>英語ドリル集</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080C14;
+  --card: #0F1420;
+  --border: #1E2535;
+  --text: #E8EAF2;
+  --muted: #5A627A;
+  --gold: #F0C060;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+.bg-fx {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(108,158,255,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(52,211,153,.05) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 60% 40%, rgba(251,146,60,.04) 0%, transparent 70%);
+}
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto;
+  padding: 52px 22px 80px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.eyebrow {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--gold); font-weight: 700; margin-bottom: 14px; text-align: center;
+}
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px; font-weight: 700; text-align: center;
+  line-height: 1.2; margin-bottom: 10px;
+  background: linear-gradient(135deg, #E8EAF2 30%, #6C9EFF 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.subtitle {
+  font-size: 13px; color: var(--muted); text-align: center;
+  line-height: 1.8; margin-bottom: 44px; max-width: 300px;
+}
+.stats-row {
+  display: flex; gap: 10px; margin-bottom: 36px; width: 100%;
+}
+.stat-box {
+  flex: 1; background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 10px; text-align: center;
+}
+.stat-n { font-size: 22px; font-weight: 800; }
+.stat-l { font-size: 10px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+.apps { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+.app-card {
+  display: block; text-decoration: none;
+  border-radius: 20px; padding: 22px 20px;
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: transform .15s;
+}
+.app-card:active { transform: scale(0.98); }
+.app-card.blue   { background: linear-gradient(135deg, #0D1535 0%, #111827 100%); }
+.app-card.green  { background: linear-gradient(135deg, #061A14 0%, #0a1018 100%); }
+.app-card.purple { background: linear-gradient(135deg, #12092A 0%, #111827 100%); }
+.app-card::after {
+  content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px;
+}
+.app-card.blue::after   { background: linear-gradient(90deg, transparent, rgba(108,158,255,.4), transparent); }
+.app-card.green::after  { background: linear-gradient(90deg, transparent, rgba(52,211,153,.3), transparent); }
+.app-card.purple::after { background: linear-gradient(90deg, transparent, rgba(167,139,250,.35), transparent); }
+.card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.app-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.blue  .app-icon { background: rgba(108,158,255,.12); border: 1px solid rgba(108,158,255,.2); }
+.green .app-icon { background: rgba(52,211,153,.1);  border: 1px solid rgba(52,211,153,.15); }
+.purple .app-icon{ background: rgba(167,139,250,.1); border: 1px solid rgba(167,139,250,.18); }
+.card-part {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.blue  .card-part { color: #6C9EFF; }
+.green .card-part { color: #34D399; }
+.purple .card-part { color: #A78BFA; }
+.card-name { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text); }
+.card-desc { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+.card-pills { display: flex; gap: 7px; flex-wrap: wrap; }
+.pill { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.blue  .pill { background: rgba(108,158,255,.1); color: #6C9EFF; border: 1px solid rgba(108,158,255,.2); }
+.green .pill { background: rgba(52,211,153,.08); color: #34D399; border: 1px solid rgba(52,211,153,.15); }
+.purple .pill{ background: rgba(167,139,250,.1); color: #A78BFA; border: 1px solid rgba(167,139,250,.18); }
+.card-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 18px; opacity: .25; }
+.footer {
+  margin-top: 48px; text-align: center;
+  font-size: 11px; color: var(--muted); line-height: 1.9;
+}
+.footer strong { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="bg-fx"></div>
+<div class="wrap">
+  <div class="eyebrow">Maho's Study Hub</div>
+  <h1 class="title">英語学習<br>ドリル集</h1>
+  <p class="subtitle">OOPT / Eiken Pre-1 対策<br>3つのドリルで総合的に練習</p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-n" style="color:#6C9EFF">30</div>
+      <div class="stat-l">Reading<br>問題</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-n" style="color:#34D399">25</div>
+      <div class="stat-l">Listening<br>問題</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-n" style="color:#A78BFA">1000+</div>
+      <div class="stat-l">Phrase<br>フレーズ</div>
+    </div>
+  </div>
+
+  <div class="apps">
+    <a class="app-card blue" href="reading.html">
+      <div class="card-top">
+        <div class="app-icon">📖</div>
+        <div>
+          <div class="card-part">Use of English</div>
+          <div class="card-name">Reading Drill</div>
+        </div>
+      </div>
+      <div class="card-desc">対話4択・含意読取・Open Clozeの3形式。<br>OOPTと同じ問題タイプで実践練習。</div>
+      <div class="card-pills">
+        <span class="pill">Part 1: 4択</span>
+        <span class="pill">Part 2: 含意</span>
+        <span class="pill">Part 3: 穴埋め</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="app-card green" href="listening.html">
+      <div class="card-top">
+        <div class="app-icon">🎧</div>
+        <div>
+          <div class="card-part">Listening</div>
+          <div class="card-name">Listening Drill</div>
+        </div>
+      </div>
+      <div class="card-desc">音声付き（TTS）・最大2回再生。<br>短い対話・長い対話・モノローグの3形式。</div>
+      <div class="card-pills">
+        <span class="pill">🇬🇧 British</span>
+        <span class="pill">🇺🇸 American</span>
+        <span class="pill">慣用句解説</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="app-card purple" href="phrase.html">
+      <div class="card-top">
+        <div class="app-icon">⌨️</div>
+        <div>
+          <div class="card-part">Speaking / Writing</div>
+          <div class="card-name">Phrase Typing</div>
+        </div>
+      </div>
+      <div class="card-desc">40トピック・英検準1級レベルのフレーズを<br>タイピングで体に染み込ませる練習。</div>
+      <div class="card-pills">
+        <span class="pill">40トピック</span>
+        <span class="pill">Lv.1〜4</span>
+        <span class="pill">音声付き</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <strong>Tip：</strong> SafariでこのページをSafariで開き<br>
+    「ホーム画面に追加」するとアプリのように使えます📱<br><br>
+    各ドリルページも個別にホーム画面へ追加できます
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Listening Drill">
+<meta name="mobile-web-app-capable" content="yes">
+<title>OOPT Listening Drill</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #0F1117;
+  --surface: #1A1D27;
+  --surface2: #232736;
+  --border: #2E3245;
+  --text: #E8EAF2;
+  --muted: #6B7094;
+  --accent: #6C9EFF;
+  --accent-d: #3A6EE8;
+  --gold: #F0C060;
+  --green: #4ADE80;
+  --green-d: #166534;
+  --green-bg: #052E16;
+  --red: #F87171;
+  --red-d: #991B1B;
+  --red-bg: #2D0A0A;
+  --amber: #FBBF24;
+  --p1: #818CF8;
+  --p2: #34D399;
+  --p3: #FB923C;
+  --p1-bg: #1E1B4B;
+  --p2-bg: #022C22;
+  --p3-bg: #2C1206;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ─── SCREEN SWITCHER ─── */
+.screen { display: none; flex-direction: column; align-items: center; }
+.screen.active { display: flex; }
+
+/* ─── HOME ─── */
+#home {
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  background: radial-gradient(ellipse at 20% 0%, #1a1f3a 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 100%, #1a2a1a 0%, transparent 60%),
+              var(--bg);
+}
+
+.home-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.home-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #E8EAF2, #818CF8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.home-sub {
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.8;
+  margin-bottom: 32px;
+  max-width: 340px;
+}
+
+.part-cards {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.part-card {
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.pc-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.pc-body { flex: 1; }
+.pc-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px; }
+.pc-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.pc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pc-count { font-size: 11px; font-weight: 600; margin-top: 4px; }
+
+.part-card.p1 { background: linear-gradient(135deg, var(--p1-bg), var(--surface)); }
+.part-card.p2 { background: linear-gradient(135deg, var(--p2-bg), var(--surface)); }
+.part-card.p3 { background: linear-gradient(135deg, var(--p3-bg), var(--surface)); }
+.part-card.p1 .pc-icon { background: var(--p1-bg); color: var(--p1); border: 1px solid var(--p1); }
+.part-card.p2 .pc-icon { background: var(--p2-bg); color: var(--p2); border: 1px solid var(--p2); }
+.part-card.p3 .pc-icon { background: var(--p3-bg); color: var(--p3); border: 1px solid var(--p3); }
+.part-card.p1 .pc-label { color: var(--p1); }
+.part-card.p2 .pc-label { color: var(--p2); }
+.part-card.p3 .pc-label { color: var(--p3); }
+.part-card.p1 .pc-count { color: var(--p1); }
+.part-card.p2 .pc-count { color: var(--p2); }
+.part-card.p3 .pc-count { color: var(--p3); }
+
+.filter-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  max-width: 460px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.filt-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.filt-btn.on { border-color: var(--accent); background: rgba(108,158,255,.12); color: var(--accent); }
+
+.start-btn {
+  width: 100%;
+  max-width: 460px;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-d), var(--p1));
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .5px;
+  transition: opacity .15s;
+}
+.start-btn:hover { opacity: .9; }
+
+.speech-notice {
+  width: 100%;
+  max-width: 460px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 9px;
+  background: rgba(240,192,96,.08);
+  border: 1px solid rgba(240,192,96,.2);
+  font-size: 11px;
+  color: var(--gold);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ─── DRILL ─── */
+#drill { min-height: 100vh; padding: 14px 16px 80px; }
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 8px;
+}
+.tb-home { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.tb-ctr { font-size: 12px; color: var(--muted); font-weight: 600; }
+.tb-streak { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(251,191,36,.1); color: var(--amber); }
+
+.prog-bar { height: 3px; background: var(--border); border-radius: 2px; width: 100%; max-width: 520px; margin-bottom: 14px; }
+.prog-fill { height: 100%; border-radius: 2px; transition: width .4s ease; background: var(--accent); }
+
+.score-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 12px;
+}
+.sc { font-size: 11px; font-weight: 700; padding: 3px 11px; border-radius: 20px; }
+.sc-ok { background: rgba(74,222,128,.1); color: var(--green); }
+.sc-ng { background: rgba(248,113,113,.1); color: var(--red); }
+
+.part-tag {
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 10px;
+}
+.pt-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+/* ─── AUDIO PLAYER ─── */
+.audio-card {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.audio-top {
+  padding: 14px 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.audio-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.accent-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.accent-gb { background: rgba(129,140,248,.1); color: var(--p1); border: 1px solid rgba(129,140,248,.2); }
+.accent-us { background: rgba(52,211,153,.1); color: var(--p2); border: 1px solid rgba(52,211,153,.2); }
+
+.play-area {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--accent-d), var(--p1));
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform .15s, opacity .15s;
+  position: relative;
+}
+.play-btn:hover { transform: scale(1.06); }
+.play-btn:disabled { background: var(--border); cursor: default; opacity: .5; transform: none; }
+.play-btn.playing { background: linear-gradient(135deg, #6B5B95, #F0C060); }
+
+.play-info { flex: 1; }
+.play-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.play-sub { font-size: 11px; color: var(--muted); }
+.play-count { font-size: 11px; font-weight: 700; color: var(--amber); }
+
+/* wave animation */
+.wave-wrap {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+.wave-wrap.active { display: flex; }
+.wave-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  animation: wave 1s ease-in-out infinite;
+}
+.wave-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 14px; animation-delay: .15s; }
+.wave-bar:nth-child(3) { height: 10px; animation-delay: .3s; }
+.wave-bar:nth-child(4) { height: 18px; animation-delay: .45s; }
+.wave-bar:nth-child(5) { height: 8px; animation-delay: .6s; }
+@keyframes wave { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(.4); } }
+
+/* script reveal (shown after 1st play or after reveal) */
+.script-area {
+  border-top: 1px solid var(--border);
+  padding: 14px 16px;
+  display: none;
+}
+.script-area.visible { display: block; }
+.script-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.script-line { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+.sl-speaker { font-size: 12px; font-weight: 700; min-width: 56px; padding-top: 1px; }
+.sl-text { font-size: 14px; color: var(--text); line-height: 1.6; }
+.sl-text.highlight { background: rgba(240,192,96,.15); border-radius: 4px; padding: 2px 6px; }
+
+/* ─── QUESTION AREA ─── */
+.q-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  margin-bottom: 11px;
+}
+.q-prompt { font-size: 15px; font-weight: 600; line-height: 1.5; }
+.q-speaker { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.opts { display: flex; flex-direction: column; gap: 7px; width: 100%; max-width: 520px; margin-bottom: 11px; }
+.opt {
+  padding: 13px 15px;
+  border-radius: 11px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .12s;
+  line-height: 1.5;
+}
+.opt:hover { border-color: var(--accent); background: rgba(108,158,255,.06); }
+.opt-c {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.opt.sel { border-color: var(--accent); background: rgba(108,158,255,.1); }
+.opt.sel .opt-c { border-color: var(--accent); color: var(--accent); }
+.opt.ok { border-color: var(--green) !important; background: rgba(74,222,128,.08) !important; }
+.opt.ok .opt-c { border-color: var(--green) !important; color: var(--green) !important; background: rgba(74,222,128,.15); }
+.opt.ng { border-color: var(--red) !important; background: rgba(248,113,113,.08) !important; }
+.opt.ng .opt-c { border-color: var(--red) !important; color: var(--red) !important; background: rgba(248,113,113,.15); }
+
+/* ─── EXPLANATION ─── */
+.expl {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: none;
+  margin-bottom: 11px;
+  line-height: 1.7;
+  font-size: 13px;
+}
+.expl.ok { background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.25); }
+.expl.ng { background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25); }
+.expl-hd { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.expl.ok .expl-hd { color: var(--green); }
+.expl.ng .expl-hd { color: var(--red); }
+.expl-jp { font-size: 12px; color: var(--muted); margin-top: 6px; font-style: italic; line-height: 1.6; }
+
+/* ─── HINT ─── */
+.hint-box {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px 14px;
+  border-radius: 9px;
+  background: rgba(240,192,96,.06);
+  border: 1px solid rgba(240,192,96,.18);
+  font-size: 12px;
+  color: var(--gold);
+  display: none;
+  margin-bottom: 11px;
+  line-height: 1.6;
+}
+
+/* ─── ACTIONS ─── */
+.act-row { display: flex; gap: 8px; width: 100%; max-width: 520px; }
+.hint-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .12s;
+}
+.check-btn {
+  flex: 2;
+  padding: 13px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent-d), var(--p1));
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+}
+.check-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+.next-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: 10px;
+  background: rgba(74,222,128,.15);
+  color: var(--green);
+  border: 1px solid rgba(74,222,128,.3);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── REVIEW ─── */
+#review { min-height: 100vh; padding: 32px 16px 80px; }
+.rv-hero { text-align: center; margin-bottom: 28px; width: 100%; max-width: 520px; }
+.rv-emoji { font-size: 52px; margin-bottom: 8px; }
+.rv-pct { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+.rv-label { font-size: 14px; color: var(--muted); }
+.rv-stats { display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+.rv-stat { background: var(--surface); border-radius: 10px; padding: 10px 20px; text-align: center; border: 1px solid var(--border); }
+.rv-stat-n { font-size: 22px; font-weight: 800; }
+.rv-stat-l { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.part-results { width: 100%; max-width: 520px; margin-bottom: 20px; }
+.pr-title { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.pr-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.pr-label { font-size: 12px; font-weight: 700; min-width: 64px; }
+.pr-bar { flex: 1; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.pr-fill { height: 100%; border-radius: 4px; transition: width .8s ease; }
+.pr-pct { font-size: 12px; font-weight: 700; min-width: 36px; text-align: right; }
+
+.rv-wrong-title { font-size: 14px; font-weight: 700; width: 100%; max-width: 520px; margin-bottom: 10px; color: var(--text); }
+.wc { background: var(--surface); border-radius: 12px; padding: 14px 16px; margin-bottom: 9px; border: 1px solid var(--border); width: 100%; max-width: 520px; }
+.wc-top { display: flex; gap: 8px; align-items: center; margin-bottom: 7px; }
+.wc-part { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 6px; letter-spacing: 1px; }
+.wc-q { font-size: 13px; color: var(--muted); margin-bottom: 5px; line-height: 1.5; }
+.wc-ans { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
+.wc-expl { font-size: 11px; color: var(--muted); font-style: italic; line-height: 1.5; }
+
+.rv-actions { display: flex; flex-direction: column; gap: 9px; width: 100%; max-width: 520px; margin-top: 8px; }
+.retry-btn {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(108,158,255,.1);
+  border: 1px solid rgba(108,158,255,.25);
+  color: var(--accent);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+}
+.home-btn {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ HOME ════════════════ -->
+<div id="home" class="screen active">
+  <div class="home-eyebrow">OOPT Listening Practice</div>
+  <h1 class="home-title">Listening Drill</h1>
+  <p class="home-sub">本番OOPTと同じ3パート形式<br>音声付き・全25問・日本語解説つき</p>
+
+  <div class="part-cards">
+    <div class="part-card p1">
+      <div class="pc-icon">🎙️</div>
+      <div class="pc-body">
+        <div class="pc-label">Part 1</div>
+        <div class="pc-title">短い対話を聞く</div>
+        <div class="pc-desc">2〜4行の短い会話を聞き、話者の発言が何を意味するかを4択で答える。明示的・暗示的な意味の両方が問われる。</div>
+        <div class="pc-count">10問</div>
+      </div>
+    </div>
+    <div class="part-card p2">
+      <div class="pc-icon">💬</div>
+      <div class="pc-body">
+        <div class="pc-label">Part 2</div>
+        <div class="pc-title">長めの対話を聞く</div>
+        <div class="pc-desc">職場・大学・日常など様々なシチュエーションの対話を聞き、話者の意図・態度・含意を答える。</div>
+        <div class="pc-count">10問</div>
+      </div>
+    </div>
+    <div class="part-card p3">
+      <div class="pc-icon">🎤</div>
+      <div class="pc-body">
+        <div class="pc-label">Part 3</div>
+        <div class="pc-title">モノローグを聞く</div>
+        <div class="pc-desc">講義・アナウンス・留守電など、一人が話す音声を聞く。内容理解・詳細把握・目的読取が問われる。</div>
+        <div class="pc-count">5問</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filt-btn on" onclick="setFilter('all',this)">全パート</button>
+    <button class="filt-btn" onclick="setFilter('1',this)">Part 1</button>
+    <button class="filt-btn" onclick="setFilter('2',this)">Part 2</button>
+    <button class="filt-btn" onclick="setFilter('3',this)">Part 3</button>
+  </div>
+
+  <button class="start-btn" onclick="startDrill()">▶ ドリルを始める</button>
+
+  <div class="speech-notice">
+    🔊 音声はブラウザのTTS（テキスト読み上げ）を使用しています。<br>
+    英国英語 / アメリカ英語の声を自動選択します。<br>
+    各問題、最大2回まで再生できます（本番と同じルール）。
+  </div>
+</div>
+
+<!-- ════════════════ DRILL ════════════════ -->
+<div id="drill" class="screen">
+  <div class="top-bar">
+    <button class="tb-home" onclick="goHome()">⌂ ホーム</button>
+    <span class="tb-ctr" id="q-ctr">1 / 25</span>
+    <span class="tb-streak" id="streak-d">🔥 0</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="score-row">
+    <span class="sc sc-ok" id="sc-ok">✓ 0</span>
+    <span class="sc sc-ng" id="sc-ng">✗ 0</span>
+  </div>
+
+  <div class="part-tag"><div class="pt-inner" id="pt-inner"></div></div>
+  <div class="audio-card" id="audio-card">
+    <div class="audio-top">
+      <span class="audio-label" id="audio-label">🎧 音声</span>
+      <span class="accent-badge" id="accent-badge"></span>
+    </div>
+    <div class="play-area">
+      <button class="play-btn" id="play-btn" onclick="playAudio()">▶</button>
+      <div class="play-info">
+        <div class="play-title" id="play-title">再生ボタンを押してください</div>
+        <div class="play-sub" id="play-sub">残り再生回数: <span class="play-count" id="play-count">2回</span></div>
+        <div class="wave-wrap" id="wave-wrap">
+          <div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+      </div>
+    </div>
+    <div class="script-area" id="script-area">
+      <div class="script-title">📄 スクリプト</div>
+      <div id="script-lines"></div>
+    </div>
+  </div>
+
+  <div class="q-card" id="q-card">
+    <div class="q-prompt" id="q-prompt"></div>
+    <div class="q-speaker" id="q-speaker"></div>
+  </div>
+  <div class="opts" id="opts-wrap"></div>
+  <div class="expl" id="expl"></div>
+  <div class="hint-box" id="hint-box"></div>
+  <div class="act-row" id="act-row"></div>
+</div>
+
+<!-- ════════════════ REVIEW ════════════════ -->
+<div id="review" class="screen">
+  <div class="rv-hero">
+    <div class="rv-emoji" id="rv-e">🎉</div>
+    <div class="rv-pct" id="rv-p">0%</div>
+    <div class="rv-label" id="rv-l">正解 / 合計</div>
+    <div class="rv-stats" id="rv-stats"></div>
+  </div>
+  <div class="part-results" id="part-results"></div>
+  <div class="rv-wrong-title" id="rv-wt"></div>
+  <div id="wlist"></div>
+  <div class="rv-actions">
+    <button class="retry-btn" onclick="retryWrong()">❌ 間違えた問題を再挑戦</button>
+    <button class="home-btn" onclick="goHome()">⌂ ホームに戻る</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// QUESTION BANK — 25 questions
+// ════════════════════════════════════════
+const QB = [
+
+// ── PART 1: Short dialogues (10 questions) ──
+{
+  id:'l1_1', part:1, accent:'en-GB',
+  script:[
+    {s:'Woman', t:'Have you heard? Sarah got the promotion.'},
+    {s:'Man',   t:'Well, it couldn\'t have happened to a better person.'},
+  ],
+  highlight:'Man', highlightLine:1,
+  q:'What does the man mean?',
+  opts:['He thinks Sarah does not deserve the promotion.',
+        'He is very pleased that Sarah got the promotion.',
+        'He is surprised that Sarah was promoted.',
+        'He thinks someone else should have been promoted.'],
+  ans:1,
+  hint:'"It couldn\'t have happened to a better person" = こんなにふさわしい人はいない（誰かを称賛する慣用句）',
+  expl:'"It couldn\'t have happened to a better person" = こんなにふさわしい人はいない。話者はSarahの昇進を心から喜んでいる。',
+  jp:'直訳「これよりふさわしい人は存在しない」→ 「彼女にぴったりだ、素晴らしい！」という最大の称賛。'
+},
+{
+  id:'l1_2', part:1, accent:'en-US',
+  script:[
+    {s:'Man',   t:'Are you coming to the conference on Friday?'},
+    {s:'Woman', t:'I\'d love to, but I\'m afraid I\'ve got a prior commitment.'},
+  ],
+  highlight:'Woman', highlightLine:1,
+  q:'What does the woman mean?',
+  opts:['She is attending the conference enthusiastically.',
+        'She wants to come but has a previous obligation.',
+        'She thinks the conference is not important.',
+        'She will try to rearrange her schedule.'],
+  ans:1,
+  hint:'"I\'d love to, but..." = 行きたいが断る。"prior commitment" = 先約',
+  expl:'"I\'d love to" = ぜひ行きたい気持ちはある。"prior commitment" = 先約があって行けない。丁寧な断り方の典型。',
+  jp:'"I\'d love to, but..." は英語で最も丁寧な断り方のひとつ。"prior commitment" = 先約・既存の予定。'
+},
+{
+  id:'l1_3', part:1, accent:'en-GB',
+  script:[
+    {s:'Woman', t:'That exam was absolutely brutal. I don\'t think I passed.'},
+    {s:'Man',   t:'You can say that again. My mind went completely blank.'},
+  ],
+  highlight:'Man', highlightLine:1,
+  q:'What does the man mean?',
+  opts:['He wants the woman to repeat what she said.',
+        'He strongly agrees that the exam was very difficult.',
+        'He is not sure if the exam was difficult.',
+        'He thinks he did well despite the difficulty.'],
+  ans:1,
+  hint:'"You can say that again" = まったくその通り（強い同意の慣用句）',
+  expl:'"You can say that again" = 「また言っても構わない」→ 転じて「全くその通り！」という強い同意。また "My mind went completely blank" = 頭が真っ白になった。',
+  jp:'"You can say that again" は "I completely agree" と同じ意味の口語慣用句。'
+},
+{
+  id:'l1_4', part:1, accent:'en-US',
+  script:[
+    {s:'Man',   t:'Did you enjoy the new manager\'s presentation?'},
+    {s:'Woman', t:'Let\'s just say it left a lot to be desired.'},
+  ],
+  highlight:'Woman', highlightLine:1,
+  q:'What does the woman mean?',
+  opts:['The presentation was excellent.',
+        'She is unsure about the quality of the presentation.',
+        'The presentation was disappointing and had many weaknesses.',
+        'She did not attend the presentation.'],
+  ans:2,
+  hint:'"leave a lot to be desired" = 非常に不満足である（批判的な婉曲表現）',
+  expl:'"leave a lot to be desired" = もっと改善の余地がある → 非常に不満足。"Let\'s just say ..." = 直接言わずに遠回しに批判する表現。',
+  jp:'"leave a lot to be desired" = 「まだ望まれるものが多い」→ つまり大変不満足だということ。'
+},
+{
+  id:'l1_5', part:1, accent:'en-GB',
+  script:[
+    {s:'Woman', t:'I\'m thinking about applying for the director position. What do you think?'},
+    {s:'Man',   t:'It\'s not for me to say, but you\'ve certainly got what it takes.'},
+  ],
+  highlight:'Man', highlightLine:1,
+  q:'What does the man mean?',
+  opts:['He thinks the woman is not qualified for the position.',
+        'He is indirectly encouraging the woman to apply.',
+        'He believes someone else should apply instead.',
+        'He does not know anything about the position.'],
+  ans:1,
+  hint:'"It\'s not for me to say, but..." = 私が言うことではないが（婉曲的なアドバイス）。"have what it takes" = 必要な資質を持っている',
+  expl:'"It\'s not for me to say" = 私が口出しすることではないが。"have what it takes" = 必要な素質・能力を持っている。→ 応募すべきだと間接的に勧めている。',
+  jp:'"have what it takes" = 「それに必要なものを持っている」→ 十分な資質がある、という最大の称賛。'
+},
+{
+  id:'l1_6', part:1, accent:'en-US',
+  script:[
+    {s:'Man',   t:'I hear the new coffee shop opened last week. Have you been?'},
+    {s:'Woman', t:'Once is enough, to be honest. It\'s not really my cup of tea.'},
+  ],
+  highlight:'Woman', highlightLine:1,
+  q:'What does the woman mean?',
+  opts:['She loves the coffee shop and plans to return.',
+        'She only drinks tea, not coffee.',
+        'She did not enjoy the coffee shop and is unlikely to return.',
+        'She thinks the coffee shop is too expensive.'],
+  ans:2,
+  hint:'"not my cup of tea" = 好みではない（英国英語の慣用句）',
+  expl:'"not one\'s cup of tea" = 自分の好みや趣味に合わない。"Once is enough" = 一度で十分 → 再訪するつもりはない。',
+  jp:'"cup of tea" = 好み・趣味。"not my cup of tea" = 私の好みではない。英国英語の代表的な慣用句。'
+},
+{
+  id:'l1_7', part:1, accent:'en-GB',
+  script:[
+    {s:'Woman', t:'The project is three weeks behind schedule. What do we do?'},
+    {s:'Man',   t:'We\'ll just have to bite the bullet and work through the weekend.'},
+  ],
+  highlight:'Man', highlightLine:1,
+  q:'What does the man mean?',
+  opts:['He suggests cancelling the project entirely.',
+        'He thinks they should accept the difficult situation and work hard.',
+        'He plans to ask for a deadline extension.',
+        'He is very upset about the schedule delay.'],
+  ans:1,
+  hint:'"bite the bullet" = 辛いことでも我慢して立ち向かう（慣用句）',
+  expl:'"bite the bullet" = 痛みや困難を我慢して行動に移す。「歯を食いしばって頑張る」という意味。→ 辛くても週末も働くしかないと言っている。',
+  jp:'"bite the bullet" = 「弾丸を噛む」→ 昔、麻酔なしの手術で弾丸を噛んで痛みに耐えたことから。困難に立ち向かうことを意味する。'
+},
+{
+  id:'l1_8', part:1, accent:'en-US',
+  script:[
+    {s:'Man',   t:'Are you sure you want to quit your job to travel for a year?'},
+    {s:'Woman', t:'My mind is made up. I\'ve been thinking about this for two years.'},
+  ],
+  highlight:'Woman', highlightLine:1,
+  q:'What does the woman mean?',
+  opts:['She is still considering her options.',
+        'She has made a firm, final decision.',
+        'She needs more time to think.',
+        'She is asking for the man\'s advice.'],
+  ans:1,
+  hint:'"My mind is made up" = 決意は固まった（変わらない）',
+  expl:'"make up one\'s mind" = 決心する。"My mind is made up" = 決意は固まった、もう変わらない。2年間考えてきたという背景からも確固たる意志が伝わる。',
+  jp:'"My mind is made up" は "I have made a decision and will not change it" と同じ意味。'
+},
+{
+  id:'l1_9', part:1, accent:'en-GB',
+  script:[
+    {s:'Woman', t:'I can\'t believe we have another meeting tomorrow. This is the fifth one this week.'},
+    {s:'Man',   t:'Hmm, it does seem rather counterproductive, doesn\'t it.'},
+  ],
+  highlight:'Man', highlightLine:1,
+  q:'What does the man mean?',
+  opts:['He thinks meetings are very helpful for productivity.',
+        'He agrees that too many meetings are reducing efficiency.',
+        'He is looking forward to the meeting.',
+        'He believes the meeting could have been an email.'],
+  ans:1,
+  hint:'"counterproductive" = 逆効果の。話者は会議が多すぎることに同意している',
+  expl:'"counterproductive" = 逆効果の、目的の達成を妨げる。"it does seem rather ..." = （強意の do）確かに〜に見える。会議が多すぎて生産性が下がっているという見解に同意している。',
+  jp:'"counterproductive" = 本来の目的を妨げる逆効果。"rather" = やや、かなり（英国英語での控えめな表現）。'
+},
+{
+  id:'l1_10', part:1, accent:'en-US',
+  script:[
+    {s:'Man',   t:'So, how did the job interview go?'},
+    {s:'Woman', t:'I gave a good account of myself, I think. Now I just have to keep my fingers crossed.'},
+  ],
+  highlight:'Woman', highlightLine:1,
+  q:'What does the woman mean?',
+  opts:['She performed badly in the interview.',
+        'She performed well and is now hoping for a positive outcome.',
+        'She is certain she will get the job.',
+        'She regrets how she performed in the interview.'],
+  ans:1,
+  hint:'"give a good account of oneself" = うまくやった・好印象を与えた。"keep one\'s fingers crossed" = 幸運を祈る',
+  expl:'"give a good account of oneself" = 自分をうまく示した、よくやった。"keep fingers crossed" = 幸運を祈る（指を交差させる仕草から）。面接でうまくやれたと思っており、良い結果を期待している。',
+  jp:'"fingers crossed" は幸運を祈るときのジェスチャーから来た表現。"I\'ll keep my fingers crossed for you" = 応援しているよ。'
+},
+
+// ── PART 2: Longer dialogues (10 questions) ──
+{
+  id:'l2_1', part:2, accent:'en-GB',
+  script:[
+    {s:'Interviewer', t:'You\'ve had quite a few of your plays staged in London now, haven\'t you?'},
+    {s:'Playwright',  t:'True, though my first play didn\'t go down very well with the producers at all.'},
+    {s:'Interviewer', t:'But you seized the moment when it came, didn\'t you?'},
+    {s:'Playwright',  t:'I suppose I did. Once I got that first production, things moved quickly.'},
+  ],
+  highlight:'Interviewer', highlightLine:2,
+  q:'What does the interviewer mean in the THIRD comment?',
+  opts:['The playwright failed to take advantage of an opportunity.',
+        'The playwright successfully grasped an unexpected chance.',
+        'The playwright planned everything carefully in advance.',
+        'The playwright was given the opportunity by someone else.'],
+  ans:1,
+  hint:'"seize the moment" = 好機をつかむ（好機を逃さず行動する）',
+  expl:'"seize the moment" = 好機をつかむ、絶好のチャンスを活かす。インタビュアーは最初の作品がうまくいかなかったにもかかわらず、チャンスをつかんだという事実を確認している。',
+  jp:'"seize the moment/opportunity" = 機会をつかむ。"didn\'t you?" = 確認の付加疑問文。'
+},
+{
+  id:'l2_2', part:2, accent:'en-US',
+  script:[
+    {s:'Student',  t:'Professor, I wanted to ask you about my essay grade.'},
+    {s:'Professor',t:'Of course. I thought your argument was well-structured, but the evidence was thin in places.'},
+    {s:'Student',  t:'I see. Is there anything I can do to improve before the final submission?'},
+    {s:'Professor',t:'I\'d recommend revisiting your sources. You\'re on the right track — just go the extra mile.'},
+  ],
+  highlight:'Professor', highlightLine:3,
+  q:'What does the professor mean in the FINAL comment?',
+  opts:['The student should walk further to find sources.',
+        'The student needs to completely rewrite the essay.',
+        'The student should make additional effort to strengthen the work.',
+        'The student has already done enough and will pass.'],
+  ans:2,
+  hint:'"go the extra mile" = 人一倍努力する・追加の努力をする（慣用句）',
+  expl:'"go the extra mile" = 普通以上に努力する、一歩先まで頑張る。"You\'re on the right track" = 方向性は正しい。あとは追加の努力をすれば良いというポジティブなアドバイス。',
+  jp:'"go the extra mile" = 「さらに1マイル余分に歩く」→ 期待以上の努力をする。'
+},
+{
+  id:'l2_3', part:2, accent:'en-GB',
+  script:[
+    {s:'Manager', t:'I\'m afraid the budget for the new project has been cut significantly.'},
+    {s:'Employee',t:'That\'s a shame. Does that mean the timeline changes too?'},
+    {s:'Manager', t:'It\'s still up in the air at the moment. We\'re waiting on a decision from head office.'},
+    {s:'Employee',t:'Understood. Should I put the preparations on hold until we know more?'},
+    {s:'Manager', t:'That would be the sensible thing to do, yes.'},
+  ],
+  highlight:'Manager', highlightLine:2,
+  q:'What does the manager mean in the THIRD comment?',
+  opts:['The timeline has been decided and will not change.',
+        'The timeline issue is still uncertain and undecided.',
+        'The timeline will definitely be extended.',
+        'Head office has already made a decision.'],
+  ans:1,
+  hint:'"up in the air" = 未定・不確かな状態（慣用句）',
+  expl:'"up in the air" = まだ決まっていない、宙に浮いた状態。"waiting on a decision" = 決定を待っている。→ タイムラインについてはまだ何も確定していない。',
+  jp:'"up in the air" = 「空中に浮いている」→ まだ決まっていない、流動的な状態。'
+},
+{
+  id:'l2_4', part:2, accent:'en-US',
+  script:[
+    {s:'A', t:'I heard you\'ve been put in charge of the new sustainability initiative.'},
+    {s:'B', t:'Yes, it\'s a big responsibility. I\'m cautiously optimistic about it.'},
+    {s:'A', t:'What do you mean by that?'},
+    {s:'B', t:'Well, I think we can make real progress, but there are still some hurdles to overcome.'},
+  ],
+  highlight:'B', highlightLine:1,
+  q:'What does B mean by "cautiously optimistic"?',
+  opts:['B is completely confident the initiative will succeed.',
+        'B has no opinion about the initiative yet.',
+        'B is hopeful but aware that challenges remain.',
+        'B is worried the initiative will fail completely.'],
+  ans:2,
+  hint:'"cautiously optimistic" = 慎重に楽観的（良い結果を期待しつつも注意が必要と認識している）',
+  expl:'"cautiously optimistic" = 「慎重に楽観的」。良い結果を期待しているが、課題もあるため無条件には喜べないという状態。その後の "real progress but hurdles to overcome" が裏付けている。',
+  jp:'"cautiously" = 慎重に。"optimistic" = 楽観的な。組み合わせて「期待はあるが無条件ではない」というニュアンス。'
+},
+{
+  id:'l2_5', part:2, accent:'en-GB',
+  script:[
+    {s:'Woman', t:'Have you finished reading that novel I lent you? It\'s been three months.'},
+    {s:'Man',   t:'I\'ve been meaning to. Work has just been insane lately.'},
+    {s:'Woman', t:'No rush, I suppose. But I would like it back before Christmas.'},
+    {s:'Man',   t:'I\'ll get it back to you well before then. I promise.'},
+  ],
+  highlight:'Man', highlightLine:1,
+  q:'What does the man mean in his SECOND comment?',
+  opts:['He has already read the novel and enjoyed it.',
+        'He has wanted to read it but has not had time.',
+        'He has lost the novel and cannot return it.',
+        'He is not interested in reading the novel.'],
+  ans:1,
+  hint:'"I\'ve been meaning to" = ずっとしようと思っていた（でもまだできていない）',
+  expl:'"I\'ve been meaning to (do something)" = 〜しようとずっと思っていたが、まだできていない。"work has been insane" = 仕事が超忙しかった。→ 読もうとは思っていたが時間がなかった。',
+  jp:'"mean to do" = 〜するつもり。現在完了進行形で「ずっとそのつもりでいた（が実行できていない）」というニュアンス。'
+},
+{
+  id:'l2_6', part:2, accent:'en-US',
+  script:[
+    {s:'Colleague A', t:'Did you hear? The company is considering merging with GlobalTech.'},
+    {s:'Colleague B', t:'Between you and me, I think it\'s a long shot.'},
+    {s:'Colleague A', t:'Really? Why do you say that?'},
+    {s:'Colleague B', t:'Our valuations are too far apart. It would take a miracle to bridge that gap.'},
+  ],
+  highlight:'Colleague B', highlightLine:1,
+  q:'What does Colleague B mean by "a long shot"?',
+  opts:['The merger is very likely to happen.',
+        'The merger is a complex but achievable goal.',
+        'The merger is highly unlikely to succeed.',
+        'The merger will definitely fail because of the valuations.'],
+  ans:2,
+  hint:'"a long shot" = 可能性が非常に低いこと（的に遠い射撃 → 成功しそうにない試み）',
+  expl:'"a long shot" = 成功の見込みが薄い試み。"Between you and me" = ここだけの話（秘密の共有）。後の発言でも "would take a miracle" と補強されている。',
+  jp:'"long shot" は射撃で的が遠い = 当たりにくい = 成功率が低いことを意味する。'
+},
+{
+  id:'l2_7', part:2, accent:'en-GB',
+  script:[
+    {s:'Tutor',   t:'Your dissertation is coming along well, but I think you need to broaden your literature review.'},
+    {s:'Student', t:'I see. Do you think I should add more recent sources?'},
+    {s:'Tutor',   t:'Partly. But I also think you\'re preaching to the converted in places.'},
+    {s:'Student', t:'What do you mean by that?'},
+    {s:'Tutor',   t:'You\'re citing sources that all agree with your central argument. You need to engage with opposing views.'},
+  ],
+  highlight:'Tutor', highlightLine:2,
+  q:'What does the tutor mean by "preaching to the converted"?',
+  opts:['The student is writing about religious topics.',
+        'The student is only citing sources that already support their view.',
+        'The student is writing in a very convincing style.',
+        'The student needs to include more personal opinions.'],
+  ans:1,
+  hint:'"preach to the converted" = すでに同意している人に説得しようとする → 一方の意見だけを引用している',
+  expl:'"preach to the converted" = 「すでに信者になっている人に説教する」→ 賛同者にしか語りかけない = 反論を無視して自分の意見だけをサポートする文献を使っている。',
+  jp:'論文では賛成意見だけでなく反論（opposing views）も取り上げることが必要。これがアカデミックライティングの基本。'
+},
+{
+  id:'l2_8', part:2, accent:'en-US',
+  script:[
+    {s:'A', t:'How do you think the new policy will affect the team?'},
+    {s:'B', t:'Well, on the face of it, it sounds reasonable.'},
+    {s:'A', t:'But?'},
+    {s:'B', t:'But I have a sneaking suspicion it\'ll create more work for everyone without actually solving the core issue.'},
+  ],
+  highlight:'B', highlightLine:3,
+  q:'What does B mean in the FINAL comment?',
+  opts:['B strongly supports the new policy.',
+        'B privately suspects the policy will cause problems without fixing the real issue.',
+        'B thinks the policy will be very effective.',
+        'B has discussed this issue with other colleagues already.'],
+  ans:1,
+  hint:'"a sneaking suspicion" = 根拠はないが心のどこかで感じる疑念。"core issue" = 核心的な問題',
+  expl:'"a sneaking suspicion" = なんとなく感じる、心のどこかにある疑念（確信ではないが拭えない不安）。"on the face of it" = 表面的には。表面は良さそうに見えるが、実際は問題を解決しないだろうという懸念。',
+  jp:'"sneaking" = こっそりと忍び寄る → "a sneaking feeling/suspicion" = 心のどこかで感じること。'
+},
+{
+  id:'l2_9', part:2, accent:'en-GB',
+  script:[
+    {s:'A', t:'Did you manage to sort out the issue with the software?'},
+    {s:'B', t:'I\'ve been working on it for hours. I think I\'ve cracked it, but I won\'t count my chickens.'},
+  ],
+  highlight:'B', highlightLine:1,
+  q:'What does B mean?',
+  opts:['B has definitely solved the problem and is very confident.',
+        'B thinks the problem may be solved but is not celebrating yet.',
+        'B has given up trying to solve the problem.',
+        'B is going to ask someone else to help.'],
+  ans:1,
+  hint:'"Don\'t count your chickens (before they hatch)" = まだ喜ぶのは早い（結果が確定するまで楽観視するな）',
+  expl:'"I\'ve cracked it" = （難しい問題を）解いた、解決した。"I won\'t count my chickens" = まだ安心するのは早い（確認できるまでは喜ばない）。"Don\'t count your chickens before they hatch" = 孵化する前に雛を数えるな、という諺の短縮形。',
+  jp:'"crack it/crack the code" = 難しい問題を解く。"count your chickens" = 結果が出る前に喜ぶこと。'
+},
+{
+  id:'l2_10', part:2, accent:'en-US',
+  script:[
+    {s:'Manager',  t:'I need someone to take the lead on the Henderson account. Any volunteers?'},
+    {s:'Employee', t:'I\'ll give it a shot. I\'ve handled similar accounts before.'},
+    {s:'Manager',  t:'Good. Though I should mention — the client can be quite demanding.'},
+    {s:'Employee', t:'I can handle it. I\'ll just have to play it by ear and adapt as I go.'},
+  ],
+  highlight:'Employee', highlightLine:3,
+  q:'What does the employee mean in the FINAL comment?',
+  opts:['The employee will follow a detailed, pre-planned strategy.',
+        'The employee will manage the situation flexibly as it develops.',
+        'The employee needs more information before starting.',
+        'The employee is worried about dealing with the difficult client.'],
+  ans:1,
+  hint:'"play it by ear" = 臨機応変に対応する（楽譜なしで演奏する → その場の状況に合わせて行動する）',
+  expl:'"play it by ear" = 楽譜なしで耳で弾く → 計画に縛られず状況に応じて柔軟に対処する。"give it a shot" = 試してみる、挑戦する。',
+  jp:'"play by ear" = 楽譜なしで耳で弾く（= 即興）→ 転じて「その場の状況に合わせて柔軟に動く」という意味。'
+},
+
+// ── PART 3: Monologues (5 questions) ──
+{
+  id:'l3_1', part:3, accent:'en-GB',
+  script:[
+    {s:'Announcement', t:'Good morning, everyone. I\'d just like to remind you that the library will be undergoing renovation work starting next Monday. The main reading room on the ground floor will be closed for approximately three weeks. However, the digital resources centre on the second floor will remain open, and all online databases will be accessible as usual. If you need to collect any reserved books or materials, please do so by Friday this week. After that, collections will temporarily move to the information desk near the main entrance. We apologise for any inconvenience and appreciate your patience during this time.'},
+  ],
+  highlight:'Announcement', highlightLine:0,
+  q:'What is the main purpose of this announcement?',
+  opts:['To inform students that the library is permanently closing.',
+        'To explain changes to library services due to upcoming renovation.',
+        'To advertise new digital resources available to students.',
+        'To ask students to return overdue library books.'],
+  ans:1,
+  hint:'主な内容：図書館の改装工事によるサービス変更のお知らせ',
+  expl:'アナウンスの目的は来週から始まる改装工事によるサービス変更（メインの閲覧室閉鎖・デジタル資料は利用可能・予約本は金曜までに取りに来る）を知らせること。',
+  jp:'アナウンス・お知らせ系の問題は「purpose（目的）」「main point（要点）」「action required（求める行動）」に注目する。'
+},
+{
+  id:'l3_2', part:3, accent:'en-US',
+  script:[
+    {s:'Professor', t:'Today I\'d like to talk about something that affects all of you — sleep. We know that sleep is essential for health, but what\'s less appreciated is its critical role in memory. During sleep, and particularly during deep slow-wave sleep, your brain consolidates the information you\'ve absorbed during the day. It essentially transfers short-term memories into long-term storage. This is why pulling an all-nighter before an exam is counterproductive. You might spend hours studying, but without sleep, much of that information simply won\'t stick. Research consistently shows that students who sleep seven to nine hours perform significantly better on tests than those who sleep fewer than six hours, even when the study time is identical.'},
+  ],
+  highlight:'Professor', highlightLine:0,
+  q:'What is the professor\'s main point?',
+  opts:['Students should study for at least nine hours before an exam.',
+        'Sleep deprivation has no significant effect on academic performance.',
+        'Adequate sleep is essential for consolidating learning and improving exam results.',
+        'Short-term memory is more important than long-term memory for exams.'],
+  ans:2,
+  hint:'メインポイント：睡眠は記憶の定着に不可欠で、試験前の徹夜は逆効果',
+  expl:'教授の主要な論点：①睡眠中に記憶が長期記憶に定着する②徹夜は逆効果③7〜9時間睡眠の学生は試験で明らかに良い成績を収める。',
+  jp:'"consolidate memories" = 記憶を定着させる。"pulling an all-nighter" = 徹夜すること。"counterproductive" = 逆効果。'
+},
+{
+  id:'l3_3', part:3, accent:'en-GB',
+  script:[
+    {s:'Voicemail', t:'Hello, this is a message for Ms. Tanaka from Brightfield Recruitment. My name is James Clarke. I\'m calling regarding your application for the Marketing Coordinator position. I\'m pleased to let you know that you\'ve been shortlisted and we\'d like to invite you to a panel interview. The interview would take place on Thursday the fourteenth at two thirty in the afternoon at our offices on King Street. Could you please call us back on zero two zero seven, four four four, nine nine zero zero to confirm whether you\'re available? We look forward to hearing from you. Thank you.'},
+  ],
+  highlight:'Voicemail', highlightLine:0,
+  q:'What action does the caller ask Ms. Tanaka to take?',
+  opts:['To send an updated CV to the recruitment agency.',
+        'To confirm her availability for an interview by calling back.',
+        'To arrive at the King Street office by Thursday.',
+        'To email a list of references to James Clarke.'],
+  ans:1,
+  hint:'要求されているアクション：電話して面接に参加できるか確認する',
+  expl:'"Could you please call us back ... to confirm whether you\'re available?" = 出席可否を電話で確認してほしい。これが唯一要求されているアクション。',
+  jp:'留守電・電話メッセージの問題では「何を求めているか（required action）」に集中する。数字や名前は混乱させるための情報であることが多い。'
+},
+{
+  id:'l3_4', part:3, accent:'en-US',
+  script:[
+    {s:'Speaker', t:'Good evening. Tonight I\'d like to address a concern that\'s been raised by many of you — the proposed development of the green space on Maple Avenue. Now, I understand the city council\'s argument that new housing is needed. And yes, the housing shortage is real. But what I\'d ask you to consider is the long-term cost of removing one of the last remaining green spaces in this neighbourhood. Studies have consistently shown that access to green spaces reduces stress, improves mental health, and brings communities together. Once we build on that land, we cannot undo it. So before we act, let\'s think carefully about what we stand to lose permanently.'},
+  ],
+  highlight:'Speaker', highlightLine:0,
+  q:'What is the speaker\'s attitude towards the proposed development?',
+  opts:['Fully supportive — more housing is urgently needed.',
+        'Neutral — the speaker sees benefits and drawbacks equally.',
+        'Cautiously opposed — the speaker acknowledges the housing need but argues the green space loss is too great.',
+        'Strongly opposed — the speaker rejects all forms of urban development.'],
+  ans:2,
+  hint:'話者の態度：住宅不足は認めつつも、緑地の喪失は受け入れ難いという立場（慎重に反対）',
+  expl:'話者は住宅不足は認めている（= 完全反対ではない）が、緑地の長期的価値と「元に戻せない」という不可逆性を強調して反対している。= cautiously opposed（慎重な反対）。',
+  jp:'話者の態度問題では "I understand X, but Y" という譲歩構文に注目。Yが話者の本当の主張。'
+},
+{
+  id:'l3_5', part:3, accent:'en-GB',
+  script:[
+    {s:'Lecturer', t:'When we talk about critical thinking, we often focus on the ability to analyse arguments and spot logical fallacies. But there\'s another dimension that\'s just as important — intellectual humility. By this, I mean the willingness to acknowledge that you might be wrong, that your knowledge has limits, and that other perspectives may have merit. Interestingly, research suggests that people with high levels of subject knowledge are sometimes more susceptible to overconfidence, not less. This is what\'s sometimes called the Dunning-Kruger plateau. The truly expert thinker, then, is not the one who never doubts, but the one who knows when to doubt — and when to ask for help.'},
+  ],
+  highlight:'Lecturer', highlightLine:0,
+  q:'According to the lecturer, what characterises a truly expert thinker?',
+  opts:['Someone who never makes mistakes or shows any doubt.',
+        'Someone with the widest possible knowledge base in their field.',
+        'Someone who knows when to question their own understanding and seek assistance.',
+        'Someone who can identify logical fallacies in others\' arguments.'],
+  ans:2,
+  hint:'専門家の思考の特徴：自分の知識の限界を知り、疑問を持ち、助けを求められること',
+  expl:'"The truly expert thinker is not the one who never doubts, but the one who knows when to doubt — and when to ask for help." これが講義の核心。"intellectual humility" = 知的謙虚さ。高い知識は逆に過信につながることがあるとも述べている。',
+  jp:'"intellectual humility" = 知的謙虚さ。"Dunning-Kruger effect" = 知識が増えると自信が増すが、真の専門家は自分の無知を知っている、というパラドックス。'
+},
+];
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let questions=[], idx=0, results=[], streak=0, bestStreak=0;
+let selected=null, revealed=false, filterPart='all';
+let playCount=0, isSpeaking=false;
+let currentUtterance=null;
+
+const PART_COLORS = {
+  1: { color:'var(--p1)', bg:'rgba(129,140,248,.12)', border:'rgba(129,140,248,.3)', fill:'#818CF8' },
+  2: { color:'var(--p2)', bg:'rgba(52,211,153,.1)',  border:'rgba(52,211,153,.25)',  fill:'#34D399' },
+  3: { color:'var(--p3)', bg:'rgba(251,146,60,.1)',  border:'rgba(251,146,60,.25)',  fill:'#FB923C' },
+};
+const PART_LABEL = {
+  1:'Part 1 — 短い対話',
+  2:'Part 2 — 長めの対話',
+  3:'Part 3 — モノローグ',
+};
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goHome(){ stopSpeech(); show('home'); }
+function setFilter(v,btn){filterPart=v;document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+
+function startDrill(){
+  let qs=[...QB];
+  if(filterPart!=='all') qs=qs.filter(q=>String(q.part)===filterPart);
+  questions=shuffle(qs);
+  idx=0;results=[];streak=0;bestStreak=0;selected=null;revealed=false;
+  show('drill');
+  renderQ();
+}
+
+function retryWrong(){
+  const wrongIds=results.filter(r=>!r.correct).map(r=>r.id);
+  if(!wrongIds.length){goHome();return;}
+  questions=shuffle(QB.filter(q=>wrongIds.includes(q.id)));
+  idx=0;results=[];streak=0;revealed=false;selected=null;
+  show('drill');
+  renderQ();
+}
+
+// ════════════════════════════════════════
+// SPEECH
+// ════════════════════════════════════════
+function stopSpeech(){
+  if(window.speechSynthesis){window.speechSynthesis.cancel();}
+  isSpeaking=false;
+  const ww=document.getElementById('wave-wrap');
+  if(ww) ww.classList.remove('active');
+  const pb=document.getElementById('play-btn');
+  if(pb){pb.classList.remove('playing');pb.textContent='▶';}
+}
+
+function getVoice(accent){
+  const voices=window.speechSynthesis.getVoices();
+  if(accent==='en-GB'){
+    return voices.find(v=>v.lang==='en-GB')||
+           voices.find(v=>v.lang.startsWith('en-GB'))||
+           voices.find(v=>v.name.toLowerCase().includes('british'))||
+           voices.find(v=>v.lang.startsWith('en'))||null;
+  }
+  return voices.find(v=>v.lang==='en-US')||
+         voices.find(v=>v.lang.startsWith('en-US'))||
+         voices.find(v=>v.lang.startsWith('en'))||null;
+}
+
+function buildSpeechText(q){
+  if(q.script.length===1) return q.script[0].t;
+  return q.script.map(l=>`${l.s} says: ${l.t}`).join('  ');
+}
+
+function playAudio(){
+  if(playCount>=2||isSpeaking) return;
+  const q=questions[idx];
+  stopSpeech();
+
+  const text=buildSpeechText(q);
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang=q.accent;
+  utter.rate=0.92;
+  utter.pitch=1.0;
+
+  const voice=getVoice(q.accent);
+  if(voice) utter.voice=voice;
+
+  const pb=document.getElementById('play-btn');
+  const ww=document.getElementById('wave-wrap');
+  const pt=document.getElementById('play-title');
+
+  utter.onstart=()=>{
+    isSpeaking=true;
+    pb.classList.add('playing');
+    pb.textContent='⏹';
+    ww.classList.add('active');
+    pt.textContent='再生中...';
+  };
+  utter.onend=utter.onerror=()=>{
+    isSpeaking=false;
+    playCount++;
+    pb.classList.remove('playing');
+    pb.textContent=playCount>=2?'🔇':'▶';
+    if(playCount>=2) pb.disabled=true;
+    ww.classList.remove('active');
+    const pc=document.getElementById('play-count');
+    if(pc) pc.textContent=playCount>=2?'再生不可':((2-playCount)+'回');
+    pt.textContent=playCount>=2?'再生回数の上限に達しました':'もう一度再生できます';
+    // After first play, show script area (only after reveal or if Part 3)
+    // Script always shown after question is answered
+  };
+
+  window.speechSynthesis.speak(utter);
+  currentUtterance=utter;
+
+  // update count display immediately
+  const pc2=document.getElementById('play-count');
+  if(pc2) pc2.textContent=(2-playCount-1+1)+'回後に制限'; // show remaining after this play
+}
+
+// ════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════
+function renderQ(){
+  if(idx>=questions.length){showReview();return;}
+  stopSpeech();
+  playCount=0;
+  selected=null;revealed=false;
+
+  const q=questions[idx];
+  const total=questions.length;
+  const correct=results.filter(r=>r.correct).length;
+  const wrong=results.filter(r=>!r.correct).length;
+
+  // top bar
+  document.getElementById('q-ctr').textContent=`${idx+1} / ${total}`;
+  const pf=document.getElementById('prog-fill');
+  pf.style.width=(idx/total*100)+'%';
+  pf.style.background=PART_COLORS[q.part].fill;
+  document.getElementById('sc-ok').textContent=`✓ ${correct}`;
+  document.getElementById('sc-ng').textContent=`✗ ${wrong}`;
+  const sd=document.getElementById('streak-d');
+  sd.textContent=`🔥 ${streak}`;
+  sd.style.opacity=streak>0?1:.5;
+
+  // part tag
+  const pc=PART_COLORS[q.part];
+  const pti=document.getElementById('pt-inner');
+  pti.style.background=pc.bg;
+  pti.style.border=`1px solid ${pc.border}`;
+  pti.style.color=pc.color;
+  pti.textContent=PART_LABEL[q.part];
+
+  // audio card
+  document.getElementById('audio-label').textContent = q.script.length===1 ? '🎤 モノローグ' : '🎧 対話音声';
+  const ab=document.getElementById('accent-badge');
+  ab.textContent=q.accent==='en-GB'?'🇬🇧 British English':'🇺🇸 American English';
+  ab.className='accent-badge '+(q.accent==='en-GB'?'accent-gb':'accent-us');
+
+  const pb=document.getElementById('play-btn');
+  pb.disabled=false;
+  pb.classList.remove('playing');
+  pb.textContent='▶';
+  document.getElementById('play-title').textContent='再生ボタンを押してください';
+  document.getElementById('play-count').textContent='2回';
+  document.getElementById('wave-wrap').classList.remove('active');
+
+  // script (hidden until reveal)
+  const sa=document.getElementById('script-area');
+  sa.classList.remove('visible');
+  const sl=document.getElementById('script-lines');
+  sl.innerHTML='';
+  q.script.forEach((line,i)=>{
+    const cls=i===q.highlightLine?'sl-text highlight':'sl-text';
+    const spcolor=PART_COLORS[q.part].color;
+    sl.innerHTML+=`<div class="script-line"><span class="sl-speaker" style="color:${spcolor}">${line.s}:</span><span class="${cls}">${line.t}</span></div>`;
+  });
+
+  // question
+  document.getElementById('q-prompt').textContent=q.q;
+  const qs=document.getElementById('q-speaker');
+  if(q.highlightLine!==undefined){
+    qs.textContent=`→ ${q.script[q.highlightLine].s}の発言に注目`;
+    qs.style.color=PART_COLORS[q.part].color;
+  } else { qs.textContent=''; }
+
+  // options
+  const ow=document.getElementById('opts-wrap');
+  ow.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.dataset.val=i;
+    btn.innerHTML=`<span class="opt-c">${String.fromCharCode(65+i)}</span>${opt}`;
+    btn.onclick=()=>selectOpt(i,btn,q);
+    ow.appendChild(btn);
+  });
+
+  // expl & hint
+  const ex=document.getElementById('expl');
+  ex.style.display='none';ex.className='expl';
+  const hb=document.getElementById('hint-box');
+  hb.style.display='none';
+
+  // action
+  document.getElementById('act-row').innerHTML=
+    `<button class="hint-btn" onclick="showHint()">💡 ヒント</button>`+
+    `<button class="check-btn" id="cbtn" disabled onclick="revealAnswer()">答え合わせ</button>`;
+}
+
+function selectOpt(i,btn,q){
+  if(revealed) return;
+  selected=i;
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const cb=document.getElementById('cbtn');
+  if(cb) cb.disabled=false;
+}
+
+function showHint(){
+  const q=questions[idx];
+  const hb=document.getElementById('hint-box');
+  hb.textContent='💡 '+q.hint;
+  hb.style.display='block';
+  document.querySelector('.hint-btn').disabled=true;
+}
+
+function revealAnswer(){
+  if(revealed) return;
+  const q=questions[idx];
+  const isCorrect=selected===q.ans;
+  revealed=true;
+
+  // reveal options
+  document.querySelectorAll('.opt').forEach((btn,i)=>{
+    btn.onclick=null;
+    btn.classList.remove('sel');
+    if(i===q.ans) btn.classList.add('ok');
+    else if(i===selected&&!isCorrect) btn.classList.add('ng');
+  });
+
+  // show script
+  document.getElementById('script-area').classList.add('visible');
+
+  // results
+  results.push({id:q.id,part:q.part,correct:isCorrect});
+  if(isCorrect){streak++;if(streak>bestStreak)bestStreak=streak;}else{streak=0;}
+
+  // streak
+  const sd=document.getElementById('streak-d');
+  sd.textContent=`🔥 ${streak}`;
+  sd.style.opacity=streak>0?1:.5;
+
+  // scores
+  const correct=results.filter(r=>r.correct).length;
+  const wrong=results.filter(r=>!r.correct).length;
+  document.getElementById('sc-ok').textContent=`✓ ${correct}`;
+  document.getElementById('sc-ng').textContent=`✗ ${wrong}`;
+
+  // explanation
+  const ex=document.getElementById('expl');
+  ex.className='expl '+(isCorrect?'ok':'ng');
+  ex.innerHTML=`<div class="expl-hd">${isCorrect?'✓ 正解！':'✗ 不正解。正解: 選択肢 '+String.fromCharCode(65+q.ans)+' — '+q.opts[q.ans]}</div>${q.expl}<div class="expl-jp">🇯🇵 ${q.jp}</div>`;
+  ex.style.display='block';
+
+  // show hint too
+  const hb=document.getElementById('hint-box');
+  hb.textContent='💡 '+q.hint;
+  hb.style.display='block';
+
+  // next button
+  const isLast=idx+1>=questions.length;
+  document.getElementById('act-row').innerHTML=
+    `<button class="next-btn" onclick="nextQ()">${isLast?'結果を見る →':'次の問題 →'}</button>`;
+}
+
+function nextQ(){
+  if(idx+1>=questions.length){showReview();return;}
+  idx++;
+  renderQ();
+}
+
+// ════════════════════════════════════════
+// REVIEW
+// ════════════════════════════════════════
+function showReview(){
+  stopSpeech();
+  show('review');
+  const total=results.length;
+  const correct=results.filter(r=>r.correct).length;
+  const pct=total?Math.round(correct/total*100):0;
+
+  document.getElementById('rv-e').textContent=pct>=80?'🎉':pct>=60?'📚':'💪';
+  document.getElementById('rv-p').textContent=pct+'%';
+  document.getElementById('rv-p').style.color=pct>=80?'var(--green)':pct>=60?'var(--amber)':'var(--red)';
+  document.getElementById('rv-l').textContent=`${correct} / ${total} 問正解`;
+
+  document.getElementById('rv-stats').innerHTML=
+    `<div class="rv-stat"><div class="rv-stat-n" style="color:var(--green)">${correct}</div><div class="rv-stat-l">正解</div></div>`+
+    `<div class="rv-stat"><div class="rv-stat-n" style="color:var(--red)">${total-correct}</div><div class="rv-stat-l">不正解</div></div>`+
+    `<div class="rv-stat"><div class="rv-stat-n" style="color:var(--amber)">${bestStreak}</div><div class="rv-stat-l">最大連続正解</div></div>`;
+
+  // by-part
+  const pr=document.getElementById('part-results');
+  pr.innerHTML='<div class="pr-title">パート別成績</div>';
+  [1,2,3].forEach(p=>{
+    const pr2=results.filter(r=>r.part===p);
+    if(!pr2.length) return;
+    const pc2=Math.round(pr2.filter(r=>r.correct).length/pr2.length*100);
+    const col=PART_COLORS[p];
+    pr.innerHTML+=`<div class="pr-row">
+      <span class="pr-label" style="color:${col.color}">${PART_LABEL[p].split('—')[0]}</span>
+      <div class="pr-bar"><div class="pr-fill" style="width:${pc2}%;background:${col.fill}"></div></div>
+      <span class="pr-pct" style="color:${col.color}">${pc2}%</span>
+    </div>`;
+  });
+
+  // wrong list
+  const wrongIds=results.filter(r=>!r.correct).map(r=>r.id);
+  const wl=document.getElementById('wlist');
+  const wt=document.getElementById('rv-wt');
+  wl.innerHTML='';
+  if(!wrongIds.length){wt.textContent='🏆 全問正解！素晴らしい！';return;}
+  wt.textContent=`❌ 要復習（${wrongIds.length}問）`;
+  wrongIds.forEach(id=>{
+    const q=QB.find(x=>x.id===id);if(!q)return;
+    const col=PART_COLORS[q.part];
+    const d=document.createElement('div');
+    d.className='wc';
+    d.innerHTML=`<div class="wc-top">
+      <span class="wc-part" style="background:${col.bg};color:${col.color};border:1px solid ${col.border}">PART ${q.part}</span>
+      <span style="font-size:10px;color:var(--muted)">${q.accent==='en-GB'?'🇬🇧':'🇺🇸'}</span>
+    </div>
+    <div class="wc-q">${q.q}</div>
+    <div class="wc-ans">✓ 正解: ${q.opts[q.ans]}</div>
+    <div class="wc-expl">💡 ${q.hint}</div>`;
+    wl.appendChild(d);
+  });
+}
+
+// Load voices on init (Chrome requires user gesture or voices loaded event)
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged=()=>{ window.speechSynthesis.getVoices(); };
+  window.speechSynthesis.getVoices();
+}
+</script>
+</body>
+</html>
