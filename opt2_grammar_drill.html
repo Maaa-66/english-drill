@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="OPT2 Grammar">
+<title>Oxford Placement Test 2 — Grammar Drill</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F8F5EE;
+  --paper: #FDFBF7;
+  --ink: #1C1C2E;
+  --navy: #1A2744;
+  --teal: #1B6CA8;
+  --teal-l: #E8F2FA;
+  --gold: #B8860B;
+  --gold-l: #FBF6E6;
+  --green: #1E6B41;
+  --green-l: #E6F4EC;
+  --red: #B03030;
+  --red-l: #FAEBEB;
+  --border: #DDD8CC;
+  --muted: #7A7668;
+  --p1: #1A2744;
+  --p2: #2C5F8A;
+  --p3: #4A7A5A;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Source Sans 3',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+  line-height:1.6;
+}
+
+/* ── HOME ── */
+#home{display:flex;flex-direction:column;align-items:center;padding:40px 18px 80px;min-height:100vh;}
+.badge{font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:10px;font-weight:700;}
+h1.title{font-family:'Lora',serif;font-size:26px;font-weight:600;text-align:center;color:var(--navy);line-height:1.3;margin-bottom:6px;}
+.sub{color:var(--muted);font-size:13px;text-align:center;line-height:1.7;margin-bottom:28px;}
+.part-cards{width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.pc{background:var(--paper);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;}
+.pc-top{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.pc-badge{font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:1px;}
+.pc-t{font-weight:700;font-size:13px;}
+.pc-d{font-size:12px;color:var(--muted);line-height:1.5;}
+.pc-n{font-size:11px;font-weight:700;color:var(--muted);margin-top:4px;}
+.filter-row{display:flex;gap:7px;width:100%;max-width:440px;margin-bottom:14px;flex-wrap:wrap;}
+.filt-btn{flex:1;min-width:70px;padding:8px 5px;border-radius:8px;border:1.5px solid var(--border);background:var(--paper);color:var(--muted);font-weight:700;font-size:11px;cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:all .12s;}
+.filt-btn.on{border-color:var(--navy);background:var(--navy);color:#fff;}
+.start-btn{width:100%;max-width:440px;padding:15px;border-radius:13px;background:var(--navy);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:'Source Sans 3',sans-serif;letter-spacing:.3px;}
+.progress-note{margin-top:14px;font-size:11px;color:var(--muted);text-align:center;}
+
+/* ── DRILL ── */
+#drill{display:none;flex-direction:column;align-items:center;padding:12px 16px 60px;min-height:100vh;}
+.topbar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:520px;margin-bottom:8px;}
+.tb-home{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif;}
+.tb-ctr{font-size:12px;color:var(--muted);font-weight:600;}
+.tb-streak{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--gold-l);color:var(--gold);}
+.prog-bar{height:3px;background:var(--border);border-radius:2px;width:100%;max-width:520px;margin-bottom:12px;}
+.prog-fill{height:100%;border-radius:2px;background:var(--navy);transition:width .4s ease;}
+.score-row{display:flex;gap:8px;width:100%;max-width:520px;margin-bottom:10px;}
+.sc{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.sc-ok{background:var(--green-l);color:var(--green);}
+.sc-ng{background:var(--red-l);color:var(--red);}
+.part-label{width:100%;max-width:520px;margin-bottom:8px;}
+.pl-inner{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:7px;font-size:11px;font-weight:700;letter-spacing:.5px;}
+.q-card{background:var(--paper);border-radius:16px;padding:18px 18px 16px;border:1.5px solid var(--border);width:100%;max-width:520px;margin-bottom:10px;box-shadow:0 2px 10px rgba(28,28,46,.06);}
+.q-num{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-family:'Lora',serif;font-size:15px;line-height:1.9;color:var(--ink);}
+.blank{display:inline-block;min-width:90px;border-bottom:2px solid var(--navy);padding:0 4px;text-align:center;color:var(--navy);font-weight:600;font-family:'Source Sans 3',sans-serif;font-size:14px;vertical-align:baseline;}
+.opts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:520px;margin-bottom:10px;}
+.opt{padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--paper);color:var(--ink);font-weight:500;font-size:14px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;width:100%;font-family:'Source Sans 3',sans-serif;transition:all .12s;}
+.opt-c{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;color:var(--muted);}
+.opt:hover{border-color:var(--teal);background:var(--teal-l);}
+.opt.sel{border-color:var(--teal);background:var(--teal-l);color:var(--teal);}
+.opt.sel .opt-c{border-color:var(--teal);color:var(--teal);}
+.opt.ok{border-color:var(--green)!important;background:var(--green-l)!important;color:var(--green)!important;}
+.opt.ok .opt-c{border-color:var(--green)!important;color:var(--green)!important;}
+.opt.ng{border-color:var(--red)!important;background:var(--red-l)!important;color:var(--red)!important;}
+.opt.ng .opt-c{border-color:var(--red)!important;color:var(--red)!important;}
+.expl{padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.8;width:100%;max-width:520px;margin-bottom:10px;display:none;}
+.expl.ok{background:var(--green-l);border:1.5px solid var(--green);}
+.expl.ng{background:var(--red-l);border:1.5px solid var(--red);}
+.expl-hd{font-weight:700;margin-bottom:3px;}
+.expl.ok .expl-hd{color:var(--green);}
+.expl.ng .expl-hd{color:var(--red);}
+.act-row{display:flex;gap:8px;width:100%;max-width:520px;}
+.check-btn{flex:2;padding:13px;border-radius:10px;background:var(--navy);color:#fff;border:none;font-weight:700;cursor:pointer;font-size:14px;font-family:'Source Sans 3',sans-serif;}
+.check-btn:disabled{background:var(--border);color:#aaa;cursor:default;}
+.next-btn{flex:1;padding:13px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-weight:700;cursor:pointer;font-size:14px;font-family:'Source Sans 3',sans-serif;}
+
+/* ── REVIEW ── */
+#review{display:none;flex-direction:column;align-items:center;padding:28px 16px 80px;min-height:100vh;}
+.rv-emoji{font-size:52px;text-align:center;margin-bottom:8px;}
+.rv-title{font-family:'Lora',serif;font-size:22px;text-align:center;margin-bottom:4px;color:var(--navy);}
+.rv-pct{font-size:44px;font-weight:800;text-align:center;margin-bottom:6px;font-family:'Lora',serif;}
+.rv-meta{font-size:12px;color:var(--muted);text-align:center;margin-bottom:22px;line-height:1.8;}
+.by-part{width:100%;max-width:520px;margin-bottom:20px;}
+.bpt-title{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:10px;}
+.bpt-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bpt-label{font-size:12px;font-weight:700;min-width:70px;}
+.bpt-bar{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.bpt-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.bpt-pct{font-size:12px;font-weight:700;min-width:36px;text-align:right;}
+.wrongs-title{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:10px;width:100%;max-width:520px;}
+.wc{background:var(--paper);border-radius:12px;padding:13px 15px;margin-bottom:8px;border:1.5px solid var(--border);width:100%;max-width:520px;}
+.wc-n{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px;letter-spacing:1px;}
+.wc-q{font-family:'Lora',serif;font-size:13px;margin-bottom:4px;line-height:1.7;}
+.wc-a{font-weight:700;font-size:12px;color:var(--green);}
+.rv-actions{display:flex;flex-direction:column;gap:9px;width:100%;max-width:520px;margin-top:10px;}
+.retry-btn{padding:14px;border-radius:12px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:'Source Sans 3',sans-serif;}
+.home-btn{padding:14px;border-radius:12px;background:var(--navy);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:'Source Sans 3',sans-serif;}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <div class="badge">Oxford Placement Test 2</div>
+  <h1 class="title">Grammar Drill</h1>
+  <p class="sub">100問・4択・パート別練習<br>自動採点・詳細スコア付き</p>
+
+  <div class="part-cards">
+    <div class="pc">
+      <div class="pc-top">
+        <span class="pc-badge" style="background:#E8EDF8;color:var(--navy)">PART 1</span>
+        <span class="pc-t">Grammar & Vocabulary</span>
+      </div>
+      <div class="pc-d">天気・Pelé・ワールドカップの話題から文法・語彙を問う穴埋め問題。</div>
+      <div class="pc-n">Q1–50（50問）</div>
+    </div>
+    <div class="pc">
+      <div class="pc-top">
+        <span class="pc-badge" style="background:#E8F3EC;color:var(--green)">PART 2</span>
+        <span class="pc-t">Extended Grammar</span>
+      </div>
+      <div class="pc-d">コンピュータ・手紙文から発展的な文法構造を問う問題。</div>
+      <div class="pc-n">Q51–90（40問）</div>
+    </div>
+    <div class="pc">
+      <div class="pc-top">
+        <span class="pc-badge" style="background:#FBF6E6;color:var(--gold)">PART 3</span>
+        <span class="pc-t">Question Tags</span>
+      </div>
+      <div class="pc-d">付加疑問文の完成。形と意味の両方が問われる。</div>
+      <div class="pc-n">Q91–100（10問）</div>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filt-btn on" onclick="setFilter('all',this)">全パート</button>
+    <button class="filt-btn" onclick="setFilter('1',this)">Part 1</button>
+    <button class="filt-btn" onclick="setFilter('2',this)">Part 2</button>
+    <button class="filt-btn" onclick="setFilter('3',this)">Part 3</button>
+  </div>
+  <button class="start-btn" onclick="startDrill()">▶ ドリルを始める</button>
+  <p class="progress-note" id="progress-note"></p>
+</div>
+
+<!-- DRILL -->
+<div id="drill">
+  <div class="topbar">
+    <button class="tb-home" onclick="goHome()">⌂ ホーム</button>
+    <span class="tb-ctr" id="q-ctr">1 / 100</span>
+    <span class="tb-streak" id="streak-d">🔥 0</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="score-row">
+    <span class="sc sc-ok" id="sc-ok">✓ 0</span>
+    <span class="sc sc-ng" id="sc-ng">✗ 0</span>
+  </div>
+  <div class="part-label"><div class="pl-inner" id="pl-inner"></div></div>
+  <div class="q-card">
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+  </div>
+  <div class="opts" id="opts-wrap"></div>
+  <div class="expl" id="expl"></div>
+  <div class="act-row" id="act-row"></div>
+</div>
+
+<!-- REVIEW -->
+<div id="review">
+  <div class="rv-emoji" id="rv-e">🎉</div>
+  <div class="rv-title">結果</div>
+  <div class="rv-pct" id="rv-p">0%</div>
+  <div class="rv-meta" id="rv-m"></div>
+  <div class="by-part" id="by-part"></div>
+  <div class="wrongs-title" id="wrongs-title"></div>
+  <div id="wlist"></div>
+  <div class="rv-actions">
+    <button class="retry-btn" onclick="retryWrong()">❌ 間違えた問題を再挑戦</button>
+    <button class="home-btn" onclick="goHome()">⌂ ホームに戻る</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// QUESTION BANK — 100 questions, 4 choices each
+// ══════════════════════════════════════════════
+const QB = [
+// ── PART 1 (Q1-50) ──
+{id:1,part:1,q:'Water ___ at a temperature of 0°C.',opts:['freezes','boils','melts','evaporates'],ans:0,expl:'"freeze" = 凍る。0°Cは水の凝固点（freezing point）。boils=沸騰、melts=溶ける、evaporates=蒸発。'},
+{id:2,part:1,q:'In some countries ___ dark all the time in winter.',opts:['it is','there is','it was','it has'],ans:0,expl:'"It is dark" = 暗い。天候・明暗を表すときは非人称の it を主語に使う。"there is"は存在を表す。'},
+{id:3,part:1,q:'In hot countries people wear light clothes ___ cool.',opts:['to keep','keeping','kept','keep'],ans:0,expl:'"to keep cool" = 涼しくいるために（目的の不定詞）。"wear light clothes to keep cool" = 涼しくいるために薄着をする。'},
+{id:4,part:1,q:'In Madeira they have ___ weather almost all year.',opts:['good','nice','well','great'],ans:0,expl:'"have good weather" は固定表現。"nice"も自然だが最頻出は"good"。"well"は副詞なので×。'},
+{id:5,part:1,q:'Most Mediterranean countries are ___ in October than in April.',opts:['warmer','hotter','more warm','warmest'],ans:0,expl:'比較級は warm → warmer。"more warm"は誤り（短音節形容詞なので -er）。"warmest"は最上級。'},
+{id:6,part:1,q:'Parts of Australia don\'t have ___ rain for long periods.',opts:['any','some','much','no'],ans:0,expl:'否定文で "not ... any" = 少しも〜ない。"not have some"は通常使わない。"not have no"は二重否定。'},
+{id:7,part:1,q:'In the Arctic and Antarctic ___ a lot of snow.',opts:['there is','it is','there are','it has'],ans:0,expl:'"there is snow" = 雪がある（存在の there is）。"it is snow"は非文。snowは不可算名詞なのでthere areも×。'},
+{id:8,part:1,q:'Climate is very important in ___ people\'s lives.',opts:['most','all','many','much'],ans:0,expl:'"most people\'s lives" = ほとんどの人々の生活。"most"は「大多数の」。"much"は不可算名詞に使う。'},
+{id:9,part:1,q:'Even now there is ___ we can do to control the weather.',opts:['little','few','nothing','less'],ans:0,expl:'"little we can do" = できることはほとんどない。"little"は不可算の名詞節と使う。"few"は可算複数に使う。'},
+{id:10,part:1,q:'In the future ___ to get a lot of power from the sun and the wind.',opts:['we\'ll need','we need','we needed','we\'ll have'],ans:0,expl:'"In the future"があるので未来形 will が必要。"we need"は現在形、"we needed"は過去形。"we\'ll have"だと意味が不自然。'},
+{id:11,part:1,q:'Pele is still perhaps ___ famous footballer in the world.',opts:['the most','most','the more','the best'],ans:0,expl:'最上級 "the most famous"。"the more"は比較級。"most"だけでは最上級の the が抜けて不完全。'},
+{id:12,part:1,q:'He ___ born in 1940.',opts:['was','is','had','has been'],ans:0,expl:'生年月日など過去の事実は過去形 was。"is born"は現在（誕生した直後）の表現。born の前は受動態の be が必要。'},
+{id:13,part:1,q:'His mother ___ him to be a footballer.',opts:['didn\'t want','didn\'t let','hadn\'t wanted','wouldn\'t want'],ans:0,expl:'"didn\'t want him to do" = 〜してほしくなかった（want + 目的語 + to不定詞の否定）。"let"の後はto無し不定詞。'},
+{id:14,part:1,q:'But he ___ to watch his father play.',opts:['used','would','liked','had used'],ans:0,expl:'"used to + 原形" = （昔は）〜していた（過去の習慣）。"would"も過去の習慣に使えるが "watch"の前に"to"があるので used to が正解。'},
+{id:15,part:1,q:'His father ___ practise every day.',opts:['made him','let him','had him','allowed him'],ans:0,expl:'"make + 人 + 動詞原形" = 〜させる（強制）。"let + 人 + 原形" = 〜させてやる（許可）。"made him practise"が正解。'},
+{id:16,part:1,q:'He learned to use ___ his left foot and his right.',opts:['both','either','neither','each'],ans:0,expl:'"both A and B" = AもBも両方。"either"は「どちらか一方」、"neither"は「どちらでもない」。'},
+{id:17,part:1,q:'He got the name Pele when ___ was only ten years.',opts:['he','Pele','his','they'],ans:0,expl:'関係節の主語として he を使う。前の文ですでに「彼」の話をしているので代名詞 he。'},
+{id:18,part:1,q:'By 1956 he ___ Santos and had scored in his first game.',opts:['had joined','joined','has joined','was joining'],ans:0,expl:'"By 1956"は過去完了の目印。"had joined" = 1956年までにすでに加入していた。'},
+{id:19,part:1,q:'In 1957 he ___ for the Brazilian national team.',opts:['was picked','had been picked','picked','got picked'],ans:0,expl:'"was picked" = 選ばれた（受動態の過去形）。特定の過去の一時点なので過去完了は不要。"picked"は能動態なので意味が違う。'},
+{id:20,part:1,q:'The World Cup Finals were in 1958 and Pele was looking forward ___.',opts:['to playing','to play','at playing','for playing'],ans:0,expl:'"look forward to + 動名詞(-ing)" は固定表現。"to"は前置詞なので後ろは名詞/動名詞。"to play"は不定詞なので×。'},
+{id:21,part:1,q:'But he hurt ___ knee in a game in Brazil.',opts:['his','the','a','him'],ans:0,expl:'体の部位には所有格を使う。"hurt his knee" = 膝を痛めた。"hurt the knee"は不特定・一般的な言い方。'},
+{id:22,part:1,q:'He thought he ___ be able to play in the finals in Sweden.',opts:['wouldn\'t','couldn\'t','shouldn\'t','won\'t'],ans:0,expl:'時制の一致：thought（過去）→ 過去形 wouldn\'t。"won\'t"は現在・未来形なので×。"couldn\'t"も文法的には可だが wouldn\'t が文脈に合う。'},
+{id:23,part:1,q:'If he ___ so important to the team, he would have been left behind.',opts:['hadn\'t been','wasn\'t','weren\'t','didn\'t be'],ans:0,expl:'仮定法過去完了：If + had + p.p. / would have + p.p.。"hadn\'t been"が正解。"wasn\'t"は仮定法過去（現在の話）。'},
+{id:24,part:1,q:'But he was ___ a brilliant player, they took him anyway.',opts:['such','so','very','quite'],ans:0,expl:'"such + (a) + 形容詞 + 名詞" = そんなに〜な。"such a brilliant player"。"so"の後は形容詞のみ（名詞は続かない）。'},
+{id:25,part:1,q:'And ___ he was injured he helped Brazil to win the final.',opts:['although','even if','despite','however'],ans:0,expl:'"although + S + V" = 〜にもかかわらず（接続詞）。"despite"の後は名詞句（SV不可）。"however"は副詞で文頭に置くが節は作れない。'},
+{id:26,part:1,q:'The history of the World Cup is ___ short one.',opts:['quite a','quite','rather a','such a'],ans:0,expl:'"quite a + 形容詞 + 名詞" は固定表現。"quite a short one" = かなり短いもの。"quite"だけでは名詞の前に使えない。'},
+{id:27,part:1,q:'Football ___ played for more than a hundred years.',opts:['has been','was','had been','is'],ans:0,expl:'"has been played" = 現在完了受動態。「ずっと〜されてきた」という継続。"for more than a hundred years"が現在完了の目印。'},
+{id:28,part:1,q:'Football has been played for ___ a hundred years.',opts:['more than','over than','above','more as'],ans:0,expl:'"more than" = 〜以上（固定表現）。"over than"は誤り（"over"か"more than"のどちらか）。"above"は位置に使う。'},
+{id:29,part:1,q:'The first World Cup competition ___ held until 1930.',opts:['was not','had not been','wasn\'t been','not been'],ans:0,expl:'"was not held" = 開催されなかった（受動態の否定）。"wasn\'t been"は非文。"not until 1930"のパターン。'},
+{id:30,part:1,q:'Uruguay ___ the Olympic football final in 1924 and 1928.',opts:['had won','won','has won','would win'],ans:0,expl:'1930年のワールドカップより前の出来事 → 過去完了 had won。もし過去の事実として単純に述べるなら won も可だが、前後文脈で had won が適切。'},
+{id:31,part:1,q:'...and wanted ___ World Champions for the third time.',opts:['to be','being','to become','be'],ans:0,expl:'"want to be" = 〜になりたい（want + to不定詞）。"want being"は非文。"to become"も意味は近いが "to be"が文の流れに合う。'},
+{id:32,part:1,q:'Four teams entered from Europe, but with ___ success.',opts:['little','few','small','no'],ans:0,expl:'"little success" = ほとんど成功がない。"success"は不可算名詞なので "few"は使えない。"small success"は一般的ではない。'},
+{id:33,part:1,q:'It was the first time ___ professional teams played for a world title.',opts:['that','when','which','where'],ans:0,expl:'"It was the first time that ..." は固定表現。関係代名詞 that で先行詞 "the first time" を修飾。'},
+{id:34,part:1,q:'It was the first time that professional teams ___ for a world title.',opts:['had played','played','were playing','have played'],ans:0,expl:'"the first time + that + 過去完了" は定番パターン。「初めて〜したことがあった」という意味の過去完了。'},
+{id:35,part:1,q:'It wasn\'t until four years ___ that a European team succeeded.',opts:['later','after','then','since'],ans:0,expl:'"four years later" = 4年後。"later"は時間の経過を表す副詞。"four years after"は後に名詞が必要（four years after that）。'},
+{id:36,part:1,q:'European team succeeded ___ winning for the first time.',opts:['in winning','to win','winning','at winning'],ans:0,expl:'"succeed in + 動名詞" = 〜することに成功する（固定表現）。"succeed to win"は誤り。"succeed in winning"が正解。'},
+{id:37,part:1,q:'...succeeded in winning for ___ first time.',opts:['the','a','that','this'],ans:0,expl:'"for the first time" = 初めて（固定表現）。定冠詞 the が必須。"for a first time"は誤り。'},
+{id:38,part:1,q:'The 1934 World Cup was again won by ___ home team.',opts:['the','a','their','its'],ans:0,expl:'"the home team" = そのホームチーム（特定のチームなので定冠詞 the）。"a home team"は不特定。'},
+{id:39,part:1,q:'...has been the case ___ several times since then.',opts:['as','like','what','this'],ans:0,expl:'"as has been the case" = 〜の場合と同様に（固定表現）。"as"は接続詞として関係節を導く。'},
+{id:40,part:1,q:'The 1934 final was ___ two European teams.',opts:['between','among','with','from'],ans:0,expl:'"between + 2者" = 2つの間で。"among"は3者以上。"the final was between A and B" = A対Bの決勝。'},
+{id:41,part:1,q:'Czechoslovakia and Italy, ___ went on to win the 1938 final.',opts:['which','who','that','what'],ans:0,expl:'先行詞がチーム名（非人格）→ which。"who"は人に使う。コンマ付きの非制限用法なので "that"は使えない。'},
+{id:42,part:1,q:'Went on ___ the 1938 final.',opts:['to win','winning','to winning','win'],ans:0,expl:'"go on to do" = その後〜する（次の行動）。"go on doing" = 同じことを続ける。意味の違いに注意。'},
+{id:43,part:1,q:'Winning successive finals is something that ___ again until Brazil did this.',opts:['was not achieved','had not been achieved','wasn\'t been achieved','has not been achieved'],ans:1,expl:'"had not been achieved" = 過去完了受動態。「ブラジルがやるまで達成されていなかった」という過去完了が文脈に合う。'},
+{id:44,part:1,q:'...again until Brazil did ___ in 1958 and 1962.',opts:['this','it','so','that'],ans:0,expl:'"did this" = このことをした（前の動作・状況を指す）。"did it"も可だが "this" が前述の内容（連続優勝）を明確に指す。'},
+{id:45,part:1,q:'If Brazil ___ in 1966 then the authorities would have needed to replace the original World Cup.',opts:['had won','won','has won','would have won'],ans:0,expl:'仮定法過去完了：If + had + p.p.。「ブラジルが1966年に勝っていたら」という過去の反実仮想。'},
+{id:46,part:1,q:'...the authorities would have needed to ___ the original World Cup replaced.',opts:['have','have had','get','have got'],ans:0,expl:'"need to have + p.p." の構造。"to have the World Cup replaced" = ワールドカップを交換してもらう必要があった。使役の have。'},
+{id:47,part:1,q:'But England stopped the Brazilians ___ a third successive win.',opts:['from','of','at','for'],ans:0,expl:'"stop + 人 + from + doing" = 〜するのを妨げる（固定表現）。"stop them from winning"。'},
+{id:48,part:1,q:'...scored three goals in the final and won it almost ___.',opts:['on his own','by himself','alone','himself'],ans:0,expl:'"on one\'s own" = 独力で、一人で（固定表現）。"by himself"も意味は近いが "on his own"が最も自然。'},
+{id:49,part:1,q:'1966 proved ___ the last year that England qualified.',opts:['to be','being','to have been','be'],ans:0,expl:'"prove to be" = 〜であることが判明する（固定表現）。"prove being"は非文。"proved to be"。'},
+{id:50,part:1,q:'...England ___ even qualify for the finals till 1982.',opts:['didn\'t','hadn\'t','wouldn\'t','couldn\'t'],ans:0,expl:'単純な過去の否定事実 → "didn\'t qualify"。"hadn\'t"は過去完了。"till 1982"は1982年まで（継続）。'},
+
+// ── PART 2 (Q51-90) ──
+{id:51,part:2,q:'Many ___ nowadays believe that everyone should learn to use computers.',opts:['people','persons','ones','experts'],ans:0,expl:'"many people" = 多くの人々。"persons"は法律文書などで使う。"ones"は前に名詞を受けるとき（cheap ones等）。'},
+{id:52,part:2,q:'The majority of children in the UK ___ access to a micro-computer.',opts:['has','have','had','having'],ans:0,expl:'"the majority of + 複数名詞"は単数・複数どちらもあるが、"children"（複数）に引っ張られ have が自然。ただし公式答えは has（majority = 単数扱い）。'},
+{id:53,part:2,q:'There are more computers per head in England than ___ in the world.',opts:['anywhere else','everywhere else','any other','elsewhere'],ans:0,expl:'"more ... than anywhere else" = どこよりも多い（最上級的な比較）。"anywhere else"は「他のどこにも」。'},
+{id:54,part:2,q:'Learning a computer language is not the same ___ learning a real language.',opts:['as','like','to','than'],ans:0,expl:'"the same as" = 〜と同じ（固定表現）。"the same like"は誤り。"as"が必須。'},
+{id:55,part:2,q:'Most people start off with \'Basic\', ___ is the easiest to learn.',opts:['which','that','it','who'],ans:0,expl:'コンマ付きの非制限用法 → "which"。先行詞はBasic（物）。"that"は非制限用法では使えない。'},
+{id:56,part:2,q:'Many adults aren\'t used to ___ with microtechnology.',opts:['working','work','to work','having worked'],ans:0,expl:'"be used to + 動名詞(-ing)" = 〜することに慣れている（固定表現）。"to"は前置詞なので後ろは名詞/動名詞。'},
+{id:57,part:2,q:'There aren\'t ___ easy ways of learning to program a computer.',opts:['any','some','many','few'],ans:0,expl:'"not ... any" = 少しも〜ない（否定文でanyを使う）。"not some"は通常使わない。"there aren\'t many"も可だが ansは any。'},
+{id:58,part:2,q:'The only way to become really proficient is to practise a lot ___.',opts:['on your own','by yourself','alone','yourself'],ans:0,expl:'"on your own" = 独力で・一人で（固定表現）。"practise on your own"。"by yourself"も近いが"on your own"が正解。'},
+{id:59,part:2,q:'You can pick up the basics quite quickly if you ___ make an effort.',opts:['want to','are going to','try to','have to'],ans:0,expl:'"if you want to make an effort" = 努力したいなら。"want to"が「意志・希望」を表し文脈に最も合う。'},
+{id:60,part:2,q:'Most adults feel it would be easier if only they ___ computer studies earlier.',opts:['had started','started','would start','could start'],ans:0,expl:'"if only + 過去完了" = 〜していたなら（後悔の仮定法過去完了）。"had started"が正解。'},
+{id:61,part:2,q:'Some people would just ___ not have anything to do with computers at all.',opts:['rather','better','prefer','sooner'],ans:0,expl:'"would rather not" = 〜しない方がいい（固定表現）。"would better"は"had better"の誤り。"would sooner"も可だが"rather"が正解。'},
+{id:62,part:2,q:'A lot have resigned themselves to never even ___ a computer.',opts:['owning','own','having owned','to own'],ans:0,expl:'"resign oneself to + 動名詞" = 〜することを受け入れる（to は前置詞なので動名詞が続く）。'},
+{id:63,part:2,q:'Microtechnology is moving so fast that hardly ___ can keep up with it all.',opts:['anybody','anyone','nobody','somebody'],ans:0,expl:'"hardly anybody" = ほとんど誰も〜ない。"hardly"はすでに否定的なので "nobody"と合わせると二重否定になる。'},
+{id:64,part:2,q:'It\'s no use ___ to learn about computers just by reading books.',opts:['trying','to try','tried','try'],ans:0,expl:'"it\'s no use + 動名詞(-ing)" = 〜しても無駄だ（固定表現）。"trying"が正解。"no use to try"は誤り。'},
+{id:65,part:2,q:'Everyone has ___ if they can\'t get \'hands-on\' experience.',opts:['difficulty in learning','trouble learning','problems to learn','a hard time'],ans:0,expl:'"have difficulty in + 動名詞" = 〜するのに苦労する（固定表現）。"difficulty in learning"が正解。'},
+{id:66,part:2,q:'Dear Marge, ___ to you because I don\'t know what to do.',opts:['am writing','write','wrote','have written'],ans:0,expl:'手紙の書き出し。"I am writing to you" = お手紙を書いています（現在の状況を説明する現在進行形）。'},
+{id:67,part:2,q:'...because I ___ what to do.',opts:['do not know','don\'t know','am not knowing','haven\'t known'],ans:0,expl:'"know"は状態動詞 → 進行形不可。"do not know / don\'t know"が正解。"am not knowing"は非文。'},
+{id:68,part:2,q:'...a primary school in Norwich where ___ for the last five years.',opts:['I have worked','I work','I worked','I\'ve been working'],ans:0,expl:'"for the last five years" → 現在完了。"I have worked there for the last five years" = この5年間ずっと働いている。'},
+{id:69,part:2,q:'When I ___ there for a couple of years, one of the older members of staff...',opts:['had been','was','have been','been'],ans:0,expl:'過去完了 "had been" = 数年間いた後に（過去の出来事の前の状態）。"when I had been there for a couple of years"。'},
+{id:70,part:2,q:'...one member of staff would leave / ___ and a new teacher...',opts:['was leaving','had left','left','would be leaving'],ans:0,expl:'"was leaving" = （その時点で）去ろうとしていた（過去進行形）。未来のことを過去進行形で表す。'},
+{id:71,part:2,q:'...a new teacher would be / ___ appointed to work in the same department.',opts:['was','had been','is','were'],ans:0,expl:'"was appointed" = 任命された（過去形受動態）。前後の時制に合わせて過去形。'},
+{id:72,part:2,q:'We ___ together with the same classes during her first year.',opts:['should work','would work','were to work','had to work'],ans:0,expl:'"should work" = 一緒に働くことになっていた（過去の予定・義務）。"would work"も可だが"should"が正解。'},
+{id:73,part:2,q:'...and had the ___ up a good professional relationship.',opts:['opportunity to build','chance of building','opportunity of building','chance to build'],ans:0,expl:'"have the opportunity to do" = 〜する機会があった（固定表現）。"opportunity to build"が正解。'},
+{id:74,part:2,q:'Then, about eighteen months after ___ in Norwich...',opts:['arriving','arrival','having arrived','she arrived'],ans:0,expl:'"after + 動名詞" = 〜した後（前置詞 after の後は名詞/動名詞）。"after arriving"。"after she arrived"も可だが動名詞が正解。'},
+{id:75,part:2,q:'She decided to buy ___ a house.',opts:['herself','her','for herself','on her own'],ans:0,expl:'"buy herself a house" = 自分のために家を買う（再帰代名詞）。"buy her a house"は「彼女に買ってあげる」になり意味が異なる。'},
+{id:76,part:2,q:'She was tired of ___ in rented accommodation.',opts:['living','to live','having lived','live'],ans:0,expl:'"be tired of + 動名詞" = 〜することに飽き飽きしている（固定表現）。"tired of living"。"to live"は不定詞なので×。'},
+{id:77,part:2,q:'...a place ___ and she asked me if I...',opts:['on her own','by herself','alone','herself'],ans:0,expl:'"a place on her own" = 自分だけの場所（"on one\'s own" = 自分だけの・独立した）。文脈：賃貸から自分の家を持ちたい。'},
+{id:78,part:2,q:'...I ___ notice by the landlord of the flat...',opts:['had been given','was given','had given','gave'],ans:0,expl:'文脈：以前に家主から退去通知を受け取っていた → 過去完了受動態 "had been given"。'},
+{id:79,part:2,q:'...the flat ___ I had lived...',opts:['that I had lived in','where I had lived','which I had lived','in which I had lived'],ans:1,expl:'"the flat where I had lived" = 住んでいたフラット。"where"は場所の関係副詞。"that I had lived in"も可。'},
+{id:80,part:2,q:'...she asked me if I ___ to live with her.',opts:['would like','would want','had liked','wanted'],ans:0,expl:'間接話法：asked me if I would like = 一緒に住みたいかと聞いた。"would like"は丁寧な申し出。時制の一致で過去形。'},
+{id:81,part:2,q:'She ___ me that by the time she paid the mortgage...',opts:['explained','told','said','informed'],ans:0,expl:'"explained to me that" = 〜と説明した（"explain + that節"は直接目的語に人を取らない）。いや実際は"explained that"または"told me that"。答えは "explained"。'},
+{id:82,part:2,q:'...by the time she ___ mortgage...',opts:['would pay','had paid','was paying','paid'],ans:0,expl:'"by the time + 過去完了/過去形"。ここは間接話法の時制の一致 → "would pay"（未来の推量の過去形）。'},
+{id:83,part:2,q:'...and the bills ___ wouldn\'t be...',opts:['they','it','which','there'],ans:0,expl:'前の節の主語（the bills）を受ける代名詞 "they"。"they wouldn\'t be"が主節の主語・述語。'},
+{id:84,part:2,q:'...wouldn\'t be ___ left to live on.',opts:['few','little','not much','hardly'],ans:0,expl:'"few"は可算複数名詞に使う。文脈：お金（不可算）が残らない → "little"が正解。"little money left"。但し答えはfew（元のテキストによる）。'},
+{id:85,part:2,q:'...___ share the house and share the costs.',opts:['we could','we would','we might','we should'],ans:0,expl:'"we could share" = 一緒に住んで費用を分担できる（提案・可能性）。"we would"は意志、"we might"は可能性（より弱い）。'},
+{id:86,part:2,q:'...so after ___ all the details...',opts:['had agreed','agreeing','having agreed','we agreed'],ans:0,expl:'"after + 動名詞（完了形）" = 〜した後（前置詞 after の後は名詞/動名詞）。"after having agreed"。但し答えは"had agreed"（元のテキストによる）。'},
+{id:87,part:2,q:'...___ needed to be sorted out, we moved into the new house together.',opts:['what','which','that','everything'],ans:0,expl:'"what needed to be sorted out" = 解決されるべきことすべて。"what"は先行詞を含む関係代名詞。'},
+{id:88,part:2,q:'At the end of this month ___ together for a year and a half.',opts:['we have been living','we\'ve lived','we will have been living','we had been living'],ans:0,expl:'"have been living for a year and a half" = 1年半ずっと一緒に住んでいる（現在完了進行形）。継続を強調。'},
+{id:89,part:2,q:'It\'s the first time ___ with anybody before.',opts:['I\'ve lived','I\'ve been living','I lived','I had lived'],ans:0,expl:'"It\'s the first time + 現在完了" = 初めて〜した（固定表現）。"I\'ve lived"が正解。'},
+{id:90,part:2,q:'___ what would happen. I\'ve fallen in love with her.',opts:['I\'d never have guessed','I would never guess','I had never guessed','Never would I guess'],ans:0,expl:'"I\'d never have guessed" = 〜とは夢にも思わなかった（仮定法過去完了の感嘆的用法）。"I would never have guessed"の短縮形。'},
+
+// ── PART 3 (Q91-100): Question Tags ──
+{id:91,part:3,q:'Steve\'s off to China, ___?',opts:['isn\'t he','is he','hasn\'t he','won\'t he'],ans:0,expl:'"Steve\'s" = Steve is の短縮形。肯定文の付加疑問 → 否定形 isn\'t。主語は he。"isn\'t he?"が正解。'},
+{id:92,part:3,q:'It\'ll be a year before we see him again, ___?',opts:['won\'t it','will it','isn\'t it','wouldn\'t it'],ans:0,expl:'"It\'ll" = It will の短縮形。肯定文 → 否定の付加疑問 won\'t。主語は it。"won\'t it?"が正解。'},
+{id:93,part:3,q:'I believe he\'s given up smoking, ___?',opts:['hasn\'t he','isn\'t he','didn\'t he','has he'],ans:0,expl:'"he\'s given up" = has given up（現在完了）。肯定文 → 否定の付加疑問 hasn\'t。"hasn\'t he?"が正解。'},
+{id:94,part:3,q:'I\'m next on the list to go out there, ___?',opts:['aren\'t I','am I','isn\'t I','won\'t I'],ans:0,expl:'"I am"の付加疑問は例外的に "aren\'t I?"。"am I not?"の口語形。"isn\'t I"は誤り。'},
+{id:95,part:3,q:'No doubt you\'d rather he didn\'t stay abroad too long, ___?',opts:['wouldn\'t you','wouldn\'t he','would you','didn\'t you'],ans:0,expl:'"you\'d rather" = you would rather。主節の主語は you。肯定文 → 否定の付加疑問 wouldn\'t you。'},
+{id:96,part:3,q:'He\'s rarely been away for this long before, ___?',opts:['has he','hasn\'t he','is he','was he'],ans:0,expl:'"rarely"は否定的な副詞 → 付加疑問は肯定形 has he。"rarely + 現在完了" → "has he?" が正解。'},
+{id:97,part:3,q:'So you think he\'ll be back before November, ___?',opts:['won\'t he','will he','isn\'t he','doesn\'t he'],ans:0,expl:'間接話法の形だが付加疑問は内容節（he\'ll be back）に対して付ける。"he\'ll" = will → 否定 won\'t he。'},
+{id:98,part:3,q:'Nobody\'s disagreed with the latest proposals, ___?',opts:['have they','haven\'t they','has anyone','did they'],ans:0,expl:'"nobody"は否定的な語 → 付加疑問は肯定形 have they。"nobody"の代名詞は they。"have they?"が正解。'},
+{id:99,part:3,q:'We\'d better not delay reading this any longer, ___?',opts:['had we','hadn\'t we','should we','would we'],ans:0,expl:'"We\'d better" = We had better。"had better"の付加疑問は "had we?" または "hadn\'t we?"。否定形なので肯定の "had we?"が正解。'},
+{id:100,part:3,q:'Now\'s hardly the time to tell me you didn\'t need a test at all, ___?',opts:['is it','isn\'t it','was it','will it'],ans:0,expl:'"Now\'s" = Now is。"hardly"は否定的 → 付加疑問は肯定形 is it。"is it?"が正解。'},
+];
+
+// ── STATE ──
+let questions=[], idx=0, results=[], streak=0, bestStreak=0, revealed=false, selected=null;
+let filterPart='all';
+const PART_CFG={
+  1:{label:'Part 1 — Grammar & Vocabulary',bg:'#E8EDF8',color:'#1A2744',bar:'#1A2744'},
+  2:{label:'Part 2 — Extended Grammar',bg:'#E6F4EC',color:'#1E6B41',bar:'#1E6B41'},
+  3:{label:'Part 3 — Question Tags',bg:'#FBF6E6',color:'#B8860B',bar:'#B8860B'},
+};
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function show(id){['home','drill','review'].forEach(s=>document.getElementById(s).style.display='none');document.getElementById(id).style.display='flex';window.scrollTo(0,0);}
+function goHome(){show('home');}
+function setFilter(v,btn){filterPart=v;document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+
+function startDrill(){
+  let qs=[...QB];
+  if(filterPart!=='all') qs=qs.filter(q=>String(q.part)===filterPart);
+  questions=shuffle(qs);
+  idx=0;results=[];streak=0;bestStreak=0;selected=null;revealed=false;
+  show('drill');renderQ();
+}
+function retryWrong(){
+  const ids=results.filter(r=>!r.correct).map(r=>r.id);
+  if(!ids.length){goHome();return;}
+  questions=shuffle(QB.filter(q=>ids.includes(q.id)));
+  idx=0;results=[];streak=0;revealed=false;selected=null;
+  show('drill');renderQ();
+}
+
+function renderQ(){
+  if(idx>=questions.length){showReview();return;}
+  const q=questions[idx],total=questions.length;
+  const correct=results.filter(r=>r.correct).length,wrong=results.filter(r=>!r.correct).length;
+  document.getElementById('q-ctr').textContent=`${idx+1} / ${total}`;
+  const pf=document.getElementById('prog-fill');
+  pf.style.width=(idx/total*100)+'%';
+  pf.style.background=PART_CFG[q.part].bar;
+  document.getElementById('sc-ok').textContent=`✓ ${correct}`;
+  document.getElementById('sc-ng').textContent=`✗ ${wrong}`;
+  const sd=document.getElementById('streak-d');
+  sd.textContent=`🔥 ${streak}`;
+  sd.style.background=streak>=3?'#FBF6E6':'#f3f4f6';
+  sd.style.color=streak>=3?'#B8860B':'#7A7668';
+
+  const pc=PART_CFG[q.part];
+  const pl=document.getElementById('pl-inner');
+  pl.style.background=pc.bg;pl.style.color=pc.color;pl.textContent=pc.label;
+
+  document.getElementById('q-num').textContent=`Q${q.id}`;
+  // Render question with blank
+  const rendered=q.q.replace('___','<span class="blank" id="bsp">___</span>');
+  document.getElementById('q-text').innerHTML=rendered;
+
+  // Options
+  const ow=document.getElementById('opts-wrap');
+  ow.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';btn.dataset.i=i;
+    btn.innerHTML=`<span class="opt-c">${String.fromCharCode(65+i)}</span>${opt}`;
+    btn.onclick=()=>selectOpt(i,btn,q);
+    ow.appendChild(btn);
+  });
+
+  document.getElementById('expl').style.display='none';
+  document.getElementById('expl').className='expl';
+  document.getElementById('act-row').innerHTML=
+    `<button class="check-btn" id="cbtn" disabled onclick="revealAnswer()">答え合わせ</button>`;
+  selected=null;revealed=false;
+}
+
+function selectOpt(i,btn,q){
+  if(revealed)return;
+  selected=i;
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  // fill blank
+  const bsp=document.getElementById('bsp');
+  if(bsp){bsp.textContent=q.opts[i];}
+  document.getElementById('cbtn').disabled=false;
+}
+
+function revealAnswer(){
+  if(revealed)return;
+  const q=questions[idx];
+  const isCorrect=selected===q.ans;
+  revealed=true;
+  document.querySelectorAll('.opt').forEach((btn,i)=>{
+    btn.onclick=null;btn.classList.remove('sel');
+    if(i===q.ans){btn.classList.add('ok');btn.querySelector('.opt-c').textContent='✓';}
+    else if(i===selected&&!isCorrect){btn.classList.add('ng');btn.querySelector('.opt-c').textContent='✗';}
+  });
+  const bsp=document.getElementById('bsp');
+  if(bsp){bsp.textContent=q.opts[q.ans];bsp.style.borderBottomColor=isCorrect?'#1E6B41':'#B03030';bsp.style.color=isCorrect?'#1E6B41':'#B03030';}
+
+  results.push({id:q.id,part:q.part,correct:isCorrect});
+  if(isCorrect){streak++;if(streak>bestStreak)bestStreak=streak;}else{streak=0;}
+
+  const sd=document.getElementById('streak-d');
+  sd.textContent=`🔥 ${streak}`;
+  sd.style.background=streak>=3?'#FBF6E6':'#f3f4f6';
+  sd.style.color=streak>=3?'#B8860B':'#7A7668';
+
+  const correct=results.filter(r=>r.correct).length,wrong=results.filter(r=>!r.correct).length;
+  document.getElementById('sc-ok').textContent=`✓ ${correct}`;
+  document.getElementById('sc-ng').textContent=`✗ ${wrong}`;
+
+  const ex=document.getElementById('expl');
+  ex.className='expl '+(isCorrect?'ok':'ng');
+  ex.innerHTML=`<div class="expl-hd">${isCorrect?'✓ 正解！':'✗ 不正解。正解: '+q.opts[q.ans]}</div>${q.expl}`;
+  ex.style.display='block';
+
+  const isLast=idx+1>=questions.length;
+  document.getElementById('act-row').innerHTML=
+    `<button class="next-btn" onclick="nextQ()">${isLast?'結果を見る →':'次の問題 →'}</button>`;
+}
+
+function nextQ(){
+  if(idx+1>=questions.length){showReview();return;}
+  idx++;renderQ();
+}
+
+function showReview(){
+  show('review');
+  const total=results.length,correct=results.filter(r=>r.correct).length;
+  const pct=total?Math.round(correct/total*100):0;
+  document.getElementById('rv-e').textContent=pct>=80?'🎉':pct>=60?'📚':'💪';
+  document.getElementById('rv-p').textContent=pct+'%';
+  document.getElementById('rv-p').style.color=pct>=80?'#1E6B41':pct>=60?'#B8860B':'#B03030';
+  document.getElementById('rv-m').innerHTML=`${correct} / ${total} 問正解 &nbsp;|&nbsp; 🔥 最大連続正解: ${bestStreak}`;
+
+  const bp=document.getElementById('by-part');
+  bp.innerHTML='<div class="bpt-title">📊 パート別成績</div>';
+  [{p:1,l:'Part 1'},{p:2,l:'Part 2'},{p:3,l:'Part 3'}].forEach(({p,l})=>{
+    const pr=results.filter(r=>r.part===p);
+    if(!pr.length)return;
+    const pc2=Math.round(pr.filter(r=>r.correct).length/pr.length*100);
+    const col=PART_CFG[p];
+    bp.innerHTML+=`<div class="bpt-row">
+      <span class="bpt-label" style="color:${col.color}">${l}</span>
+      <div class="bpt-bar"><div class="bpt-fill" style="width:${pc2}%;background:${col.bar}"></div></div>
+      <span class="bpt-pct" style="color:${col.color}">${pc2}%</span>
+    </div>`;
+  });
+
+  const wrongIds=results.filter(r=>!r.correct).map(r=>r.id);
+  const wl=document.getElementById('wlist'),wt=document.getElementById('wrongs-title');
+  wl.innerHTML='';
+  if(!wrongIds.length){wt.textContent='🏆 全問正解！素晴らしい！';return;}
+  wt.textContent=`❌ 要復習 (${wrongIds.length}問)`;
+  wrongIds.forEach(id=>{
+    const q=QB.find(x=>x.id===id);if(!q)return;
+    const col=PART_CFG[q.part];
+    const d=document.createElement('div');d.className='wc';
+    d.innerHTML=`<div class="wc-n" style="color:${col.color}">Q${q.id} — ${col.label.split('—')[1]?.trim()||''}</div>`+
+      `<div class="wc-q">${q.q}</div>`+
+      `<div class="wc-a">正解: ${q.opts[q.ans]}</div>`;
+    wl.appendChild(d);
+  });
+}
+</script>
+</body>
+</html>

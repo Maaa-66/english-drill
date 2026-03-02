@@ -73,12 +73,14 @@ body {
 .app-card.blue   { background: linear-gradient(135deg, #0D1535 0%, #111827 100%); }
 .app-card.green  { background: linear-gradient(135deg, #061A14 0%, #0a1018 100%); }
 .app-card.purple { background: linear-gradient(135deg, #12092A 0%, #111827 100%); }
+.app-card.orange { background: linear-gradient(135deg, #1A0D06 0%, #111827 100%); }
 .app-card::after {
   content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px;
 }
 .app-card.blue::after   { background: linear-gradient(90deg, transparent, rgba(108,158,255,.4), transparent); }
 .app-card.green::after  { background: linear-gradient(90deg, transparent, rgba(52,211,153,.3), transparent); }
 .app-card.purple::after { background: linear-gradient(90deg, transparent, rgba(167,139,250,.35), transparent); }
+.app-card.orange::after { background: linear-gradient(90deg, transparent, rgba(251,146,60,.35), transparent); }
 .card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .app-icon {
   width: 52px; height: 52px; border-radius: 14px;
@@ -88,6 +90,7 @@ body {
 .blue  .app-icon { background: rgba(108,158,255,.12); border: 1px solid rgba(108,158,255,.2); }
 .green .app-icon { background: rgba(52,211,153,.1);  border: 1px solid rgba(52,211,153,.15); }
 .purple .app-icon{ background: rgba(167,139,250,.1); border: 1px solid rgba(167,139,250,.18); }
+.orange .app-icon{ background: rgba(251,146,60,.1);  border: 1px solid rgba(251,146,60,.18); }
 .card-part {
   font-size: 10px; font-weight: 700; letter-spacing: 2px;
   text-transform: uppercase; margin-bottom: 3px;
@@ -95,6 +98,7 @@ body {
 .blue  .card-part { color: #6C9EFF; }
 .green .card-part { color: #34D399; }
 .purple .card-part { color: #A78BFA; }
+.orange .card-part { color: #FB923C; }
 .card-name { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text); }
 .card-desc { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
 .card-pills { display: flex; gap: 7px; flex-wrap: wrap; }
@@ -102,6 +106,7 @@ body {
 .blue  .pill { background: rgba(108,158,255,.1); color: #6C9EFF; border: 1px solid rgba(108,158,255,.2); }
 .green .pill { background: rgba(52,211,153,.08); color: #34D399; border: 1px solid rgba(52,211,153,.15); }
 .purple .pill{ background: rgba(167,139,250,.1); color: #A78BFA; border: 1px solid rgba(167,139,250,.18); }
+.orange .pill{ background: rgba(251,146,60,.08); color: #FB923C; border: 1px solid rgba(251,146,60,.18); }
 .card-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 18px; opacity: .25; }
 .footer {
   margin-top: 48px; text-align: center;
@@ -115,7 +120,7 @@ body {
 <div class="wrap">
   <div class="eyebrow">Maho's Study Hub</div>
   <h1 class="title">英語学習<br>ドリル集</h1>
-  <p class="subtitle">OOPT / Eiken Pre-1 対策<br>3つのドリルで総合的に練習</p>
+  <p class="subtitle">OOPT / Eiken Pre-1 対策<br>4つのドリルで総合的に練習</p>
 
   <div class="stats-row">
     <div class="stat-box">
@@ -125,6 +130,10 @@ body {
     <div class="stat-box">
       <div class="stat-n" style="color:#34D399">25</div>
       <div class="stat-l">Listening<br>問題</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-n" style="color:#FB923C">100</div>
+      <div class="stat-l">Grammar<br>問題</div>
     </div>
     <div class="stat-box">
       <div class="stat-n" style="color:#A78BFA">1000+</div>
@@ -180,6 +189,23 @@ body {
         <span class="pill">40トピック</span>
         <span class="pill">Lv.1〜4</span>
         <span class="pill">音声付き</span>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <a class="app-card orange" href="opt2_grammar_drill.html">
+      <div class="card-top">
+        <div class="app-icon">📝</div>
+        <div>
+          <div class="card-part">Grammar</div>
+          <div class="card-name">OPT2 Grammar Drill</div>
+        </div>
+      </div>
+      <div class="card-desc">Oxford Placement Test 2の文法100問。<br>付加疑問文・仮定法・時制など総合対策。</div>
+      <div class="card-pills">
+        <span class="pill">100問</span>
+        <span class="pill">4択</span>
+        <span class="pill">日本語解説</span>
       </div>
       <span class="card-arrow">›</span>
     </a>
