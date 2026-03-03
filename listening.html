@@ -607,7 +607,9 @@ function getSpeakerVoice(accent, speakerIndex) {
 }
 
 function playAudio(){
-  if(playCount>=2 || isSpeaking) return;
+  // After reveal: unlimited replay. Before reveal: max 2 plays.
+  if(!revealed && playCount>=2) return;
+  if(isSpeaking) return;
   const q=questions[idx];
   stopSpeech();
   isSpeaking=true;
@@ -632,14 +634,19 @@ function playAudio(){
     if(lineIdx >= q.script.length) {
       // All done
       isSpeaking=false;
-      playCount++;
+      if(!revealed) playCount++;
       pb.classList.remove('playing');
-      pb.textContent = playCount>=2 ? '🔇' : '▶';
-      if(playCount>=2) pb.disabled=true;
+      pb.textContent = (!revealed && playCount>=2) ? '🔇' : '▶';
+      if(!revealed && playCount>=2) pb.disabled=true;
       ww.classList.remove('active');
       const pc=document.getElementById('play-count');
-      if(pc) pc.textContent = playCount>=2 ? '再生不可' : (2-playCount)+'回';
-      pt.textContent = playCount>=2 ? '再生回数の上限に達しました' : 'もう一度再生できます';
+      if(revealed){
+        if(pc) pc.textContent = '∞（何度でも）';
+        pt.textContent = '🔁 何度でも再生できます';
+      } else {
+        if(pc) pc.textContent = playCount>=2 ? '再生不可' : (2-playCount)+'回';
+        pt.textContent = playCount>=2 ? '再生回数の上限に達しました' : 'もう一度再生できます';
+      }
       const ns=document.getElementById('now-speaking');
       if(ns) ns.textContent='';
       document.querySelectorAll('.script-line').forEach(el=>el.classList.remove('speaking-now'));
@@ -797,6 +804,18 @@ function revealAnswer(){
   });
 
   document.getElementById('script-area').classList.add('visible');
+
+  // Re-enable play button for unlimited review listening
+  const pb2=document.getElementById('play-btn');
+  if(pb2){
+    pb2.disabled=false;
+    pb2.textContent='▶';
+    pb2.classList.remove('playing');
+  }
+  const pc3=document.getElementById('play-count');
+  if(pc3) pc3.textContent='∞（何度でも）';
+  const pt2=document.getElementById('play-title');
+  if(pt2) pt2.textContent='🔁 何度でも再生できます';
 
   results.push({id:q.id,part:q.part,correct:isCorrect});
   if(isCorrect){streak++;if(streak>bestStreak)bestStreak=streak;}else{streak=0;}
