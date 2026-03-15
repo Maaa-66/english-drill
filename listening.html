@@ -684,50 +684,58 @@ function _doPlay(){
       return;
     }
 
-    const line=q.script[lineIdx];
-    const male=isMaleSpeaker(line.s);
+    const line = q.script[lineIdx];
+    const male  = isMaleSpeaker(line.s);
 
     // スクリプトハイライト
-    document.querySelectorAll('.script-line').forEach(el=>el.classList.remove('speaking-now'));
-    const scriptLines=document.querySelectorAll('.script-line');
-    if(scriptLines[lineIdx]) scriptLines[lineIdx].classList.add('speaking-now');
+    document.querySelectorAll('.script-line').forEach(el => el.classList.remove('speaking-now'));
+    const scriptLines = document.querySelectorAll('.script-line');
+    if (scriptLines[lineIdx]) scriptLines[lineIdx].classList.add('speaking-now');
 
     // 話者表示
-    const ns=document.getElementById('now-speaking');
-    if(ns) ns.textContent=(male?'👨':'👩')+' '+line.s+' が話しています';
+    const ns = document.getElementById('now-speaking');
+    if (ns) ns.textContent = (male ? '👨' : '👩') + ' ' + line.s + ' が話しています';
 
-    // ── 重要：毎回新しいUtteranceを作り、voiceを明示的にセット ──
-    const utter=new SpeechSynthesisUtterance();
-    utter.text   = line.t;
-    utter.lang   = male ? 'en-GB' : 'en-US';
-    utter.rate   = q.script.length===1 ? 0.85 : 0.88;
-    utter.pitch  = 1.0;
-    utter.volume = 1.0;
-
-    // voiceを確実に取得して設定
-    const voice = male ? voiceMale : voiceFemale;
-    if(voice) {
-      utter.voice = voice;
+    // ── Chromeバグ対策：voiceをgetVoices()から毎回直接取得 ──
+    // 保存済みの参照ではなく毎回リストから取り直す
+    const allVoices = window.speechSynthesis.getVoices();
+    let voice = null;
+    if (male) {
+      voice = allVoices.find(v => v.name === 'Google UK English Male')
+           || allVoices.find(v => v.lang === 'en-GB')
+           || allVoices.find(v => v.lang.startsWith('en-GB'))
+           || allVoices.find(v => v.lang.startsWith('en'));
+    } else {
+      voice = allVoices.find(v => v.name === 'Google US English')
+           || allVoices.find(v => v.lang === 'en-US')
+           || allVoices.find(v => v.lang.startsWith('en-US'))
+           || allVoices.find(v => v.lang.startsWith('en') && v.name !== 'Google UK English Male');
     }
 
-    utter.onend=()=>{
+    // Utteranceを作成してvoiceをセット
+    const utter = new SpeechSynthesisUtterance(line.t);
+    utter.lang   = male ? 'en-GB' : 'en-US';
+    utter.rate   = q.script.length === 1 ? 0.85 : 0.88;
+    utter.pitch  = 1.0;
+    utter.volume = 1.0;
+    if (voice) utter.voice = voice;
+
+    utter.onend = () => {
       lineIdx++;
-      // 話者間の自然な間
-      const pause = q.script.length > 1 ? 300 : 150;
+      const pause = q.script.length > 1 ? 320 : 150;
       setTimeout(speakNext, pause);
     };
-    utter.onerror=(e)=>{
-      console.warn('Speech error:', e.error, 'speaker:', line.s);
+    utter.onerror = (e) => {
+      console.warn('TTS error:', e.error, line.s);
       lineIdx++;
       setTimeout(speakNext, 100);
     };
 
-    // cancel()を呼ばない！voiceを設定してそのままspeak
     window.speechSynthesis.speak(utter);
   }
 
   speakNext();
-  pt.textContent='再生中...';
+  pt.textContent = '再生中...';
 }
 
 // ════════════════════════════════════════
