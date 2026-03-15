@@ -235,9 +235,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   </div>
   <button class="start-btn" onclick="startDrill()">▶ ドリルを始める</button>
   <div class="speech-notice">
-    🎭 対話問題は<strong>男性・女性2人の声</strong>で交互に再生されます。<br>
+    🎭 対話問題は<strong>低い声（男性）・高い声（女性）</strong>で交互に再生されます。<br>
     各問題、最大2回まで再生できます（本番と同じルール）。<br>
-    ※ Chrome推奨・Google音声が使用されます。<br>
+    ※ Chrome推奨・Google UK English Male使用。<br>
     <span id="voice-status" style="font-size:11px;margin-top:6px;display:inline-block;">⏳ 音声読み込み中...</span>
   </div>
 </div>
@@ -696,29 +696,23 @@ function _doPlay(){
     const ns = document.getElementById('now-speaking');
     if (ns) ns.textContent = (male ? '👨' : '👩') + ' ' + line.s + ' が話しています';
 
-    // ── Chromeバグ対策：voiceをgetVoices()から毎回直接取得 ──
-    // 保存済みの参照ではなく毎回リストから取り直す
+    // ── 最も安定した方法：1つの声 + pitchで男女を表現 ──
+    // Web Speech APIのvoice切り替えはChromeで不安定なため
+    // Google UK English Maleを固定で使い、pitchで声質を変える
     const allVoices = window.speechSynthesis.getVoices();
-    let voice = null;
-    if (male) {
-      voice = allVoices.find(v => v.name === 'Google UK English Male')
-           || allVoices.find(v => v.lang === 'en-GB')
-           || allVoices.find(v => v.lang.startsWith('en-GB'))
-           || allVoices.find(v => v.lang.startsWith('en'));
-    } else {
-      voice = allVoices.find(v => v.name === 'Google US English')
-           || allVoices.find(v => v.lang === 'en-US')
-           || allVoices.find(v => v.lang.startsWith('en-US'))
-           || allVoices.find(v => v.lang.startsWith('en') && v.name !== 'Google UK English Male');
-    }
+    const baseVoice = allVoices.find(v => v.name === 'Google UK English Male')
+                   || allVoices.find(v => v.lang.startsWith('en-GB'))
+                   || allVoices.find(v => v.lang.startsWith('en'))
+                   || null;
 
-    // Utteranceを作成してvoiceをセット
     const utter = new SpeechSynthesisUtterance(line.t);
-    utter.lang   = male ? 'en-GB' : 'en-US';
-    utter.rate   = q.script.length === 1 ? 0.85 : 0.88;
-    utter.pitch  = 1.0;
+    utter.lang   = 'en-GB';
+    utter.rate   = male
+      ? (q.script.length === 1 ? 0.85 : 0.88)   // 男性：やや遅め
+      : (q.script.length === 1 ? 0.90 : 0.93);  // 女性：やや速め
+    utter.pitch  = male ? 0.80 : 1.40;  // 男性：低い  女性：高い
     utter.volume = 1.0;
-    if (voice) utter.voice = voice;
+    if (baseVoice) utter.voice = baseVoice;
 
     utter.onend = () => {
       lineIdx++;
